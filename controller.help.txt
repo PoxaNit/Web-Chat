@@ -1,1 +1,26 @@
-help here
+
+ This script receives commands to do several tasks, like
+ manage the database.
+
+ commands:
+
+   serve:
+     Run the servers
+
+
+   database:
+     Manage the database
+
+     sub-commands:
+
+       create:tables
+         Create the database tables
+
+       delete:tables
+         Delete the database tables
+
+       insert:data
+         Run the seeders, insert the data in the tables
+
+       delete:data
+         Delete the data of all tables

@@ -1,7 +1,8 @@
-import { readFile } from "node:fs/promises"  ;
-import   dotenv     from "dotenv"            ;
-import   process    from "node:process"      ;
-import { exec     } from "node:child_process";
+import { readFile      } from "node:fs/promises"  ;
+import   dotenv          from "dotenv"            ;
+import   process         from "node:process"      ;
+import { exec          } from "node:child_process";
+import   * as readline   from "node:readline"     ;
 
 
  dotenv.config({path: ".env", debug: true});
@@ -51,7 +52,7 @@ import { exec     } from "node:child_process";
 
  function execDatabase (file) {
 
-     exec("cd database/seeders; node " + command, (error, stdout, stderr) => {
+     exec("cd database/seeders; node " + file, (error, stdout, stderr) => {
 
          if (error) {
 
@@ -67,7 +68,87 @@ import { exec     } from "node:child_process";
 
  }
 
+
+
+ function makeCommit () {
+
+     readline.question("Would you like to commit any change? (y/N)\n", anwser => {
+
+         const positive = (answer === "y" || answer === "Y") ? true : false;
+
+         if (positive) {
+
+             readline.question("Tell the changes:\n", data => {
+
+                 exec(`git add .; git commit -m ${data}`, (error, stdout, stderr) => {
+
+                     if (error) {
+
+                         console.log(`Something worked wrong:`);
+                         console.error(error);
+                         return;
+
+                     }
+
+                     console.log(stdout);
+
+                 });
+
+             });
+
+             return;
+
+         } else return;
+
+
+         readline.question("Would you like to push it to the git repository? (y/N)\n", answer => {
+
+             const positive = (answer === "y" || answer === "Y") ? true : false;
+
+             if (positive) {
+
+                 readline.question("Wich branch do you would like to push:\n", branch => {
+
+                     exec(`git push origin ${branch}`, (error, stdout, stderr) => {
+
+                         if (error) {
+
+			     console.log("Something worked wrong:");
+
+			     console.error(error);
+			     return;
+
+                         }
+
+		         console.log(stdout);
+
+                     });
+
+                 });
+
+
+             } else return;
+
+         });
+
+
+     });
+
+ }
+
+
+
+
+
+
+
+
+
  async function main (argv, argc) {
+
+
+     process.on("beforeExit", makeCommit);
+
 
      switch (argc) {
 
@@ -87,11 +168,11 @@ import { exec     } from "node:child_process";
 
          case 4:
 
-             switch (argv[3]) {
+             switch (argv[2]) {
 
                  case "database":
 
-                     switch(argv[4]) {
+                     switch(argv[3]) {
 
                          case "create:tables":
 
