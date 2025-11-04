@@ -40,17 +40,6 @@ import fs from "node:fs";
 
      ws.on("message", data => {
 
-     /*
-        What is expected from data:
-
-        JSON
-
-        '{
-          userId,
-          userName,
-          message
-        }'
-     */
 
          const json = JSON.parse(data);
 

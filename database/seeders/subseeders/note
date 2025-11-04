@@ -1,0 +1,9 @@
+
+ In order to make easier to insert the data in the
+ database, by convention, each subseeder here in
+ this must have the same name as the respective table
+ name in the database.
+
+ EXAMPLE:
+
+     To table users, there's the subseeder "users.js".

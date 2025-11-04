@@ -1,0 +1,14 @@
+[
+  {
+    "id":1,
+    "name":"Júlio César",
+    "password":123,
+    "email":"jc.5047792@gmail.com"
+  },
+  {
+    "id":2,
+    "name":"Gustavo Andrade",
+    "password":"123456",
+    "email":"gustavinho@gmail.com"
+  }
+]

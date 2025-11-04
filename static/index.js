@@ -13,11 +13,11 @@
 
  ws.onmessage = event => {
 
-     console.log(`Server says: ${event.data}`);
+     const json = JSON.parse(event.data);
 
-     const p = document.createElement("");
+     const p = document.createElement("p");
 
-     p.textContent = event.data;
+     p.textContent = `Server: ${json.message}`;
 
      inputArea.appendChild(p);
 
