@@ -1,9 +1,25 @@
-import { WebSocketServer } from "ws";
-import express from "express";
-import fs from "node:fs";
+import { WebSocketServer } from "ws"                         ;
+import   express           from "express"                    ;
+import   fs                from "node:fs"                    ;
+import   createUser        from "./workScripts/createUser.js";
+
+
+
+
+
+
+ // HTTP SERVER
 
  const app      = express();
  const httpPort = 8080;
+
+
+
+
+ /* ------------------- ROUTES ------------------------------*/
+
+
+
 
  app.get("/", (req, res) => {
 
@@ -25,6 +41,40 @@ import fs from "node:fs";
 
 
  });
+
+ app.post("/users", (req, res) => {
+
+     
+
+ });
+
+
+
+ /* ------------------------ ROUTES - END ---------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  app.use(express.static("./static"));
 
