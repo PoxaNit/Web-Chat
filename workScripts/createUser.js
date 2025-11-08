@@ -1,4 +1,4 @@
-import   generateDatabaseId   from "./utilities/generateDatabaseId";
+import   generateDatabaseId   from "./utilities/generateDatabaseId.js";
 import { JSONFile           } from "lowdb/node"                    ;
 import { Low                } from "lowdb"                         ;
 

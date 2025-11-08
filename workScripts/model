@@ -1,0 +1,14 @@
+import { JSONFile } from "lowdb/node";
+import { Low      } from "lowdb"     ;
+
+
+ const adapter = new JSONFile("../database/db.json");
+ const db      = new Low(adapter, {})               ;
+ await db.read()                                    ;
+
+
+ function model () {
+
+ }
+
+ export default model;

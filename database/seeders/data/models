@@ -1,0 +1,58 @@
+
+
+ This is how each main object in the database must be.
+
+
+
+ Models:
+
+
+ Model of object users:
+
+   properties of object:
+
+     id         -> numeric
+     created_at -> string
+     updated_at -> string
+     name       -> string
+     email      -> string
+     password   -> string
+
+
+
+ Model of object messages:
+
+   properties of object:
+
+     id                -> numeric
+     created_at        -> string
+     updated_at        -> string
+     user_id           -> numeric
+     recipient_user_id -> numeric
+     content           -> string
+     read_at           -> string
+     status            -> string ("sent", "delivered", "read")
+
+
+ Model of object groups:
+
+   properties of object:
+
+     id              -> numeric
+     created_at      -> string
+     updated_at      -> string
+     name            -> string
+     participant_ids -> number[]
+     admin_ids       -> number[]
+
+
+
+ Model of object login:
+
+   properties of object:
+
+     id         -> numeric
+     created_at -> string
+     updated_at -> string
+     user_id    -> numeric
+     is_logged  -> boolean

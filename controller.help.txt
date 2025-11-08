@@ -24,3 +24,11 @@
 
        delete:data
          Delete the data of all tables
+
+   create:
+     Create things
+
+     sub-commands:
+
+       workScript name
+         Create a new script to be usable in other scripts

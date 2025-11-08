@@ -7,9 +7,10 @@ import { JSONFile } from "lowdb/node"      ;
  db.data     ||= db.data                   ;
 
  const tables = {
-   users:    [],
+   users   : [],
    messages: [],
-   groups:   []
+   groups  : [],
+   login   : []
  }
 
 
