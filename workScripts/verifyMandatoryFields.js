@@ -9,7 +9,8 @@ import { exec     } from "node:child_process";
 
  async function verifyMandatoryFields (
    seeders_dir_path, // So this function can be called from anywhere
-   makeFields = false // In case of field is not present
+   makeFields = false, // In case of field is not present
+   silent     = false // Let the caller to not deal with side effect output
  ) {
 
      const mandatoryFields = [
@@ -59,9 +60,14 @@ import { exec     } from "node:child_process";
 
              if (error) throw error;
 
-             console.log(stdout);
+             if (!silent) {
 
-             console.log(stderr);
+                 console.log(stdout);
+
+                 console.log(stderr);
+
+             }
+
 
          });
 

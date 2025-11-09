@@ -15,13 +15,12 @@ import   verifyMandatoryFields    from "./verifyMandatoryFields.js"       ;
  await db.read()                                    ;
 
 
+// Ensure all the necessary fields in the database are existent
+ verifyMandatoryFields("../database/seeders", true, true) ;
 
 
 
  async function createUser (dataObject) {
-
-
-     verifyMandatoryFields(true); // Ensure all the necessary fields in the database are existent
 
   // Default values
 
@@ -50,22 +49,41 @@ import   verifyMandatoryFields    from "./verifyMandatoryFields.js"       ;
      const newUserId = generateDatabaseId("users") ;
 
 
-     if (!newUserId) return                        ;
-
      const newLoginId = generateDatabaseId("login");
 
-     if (!newLoginId) return                       ;
+     if (!newLoginId) {
 
 
-     const dateNow = Date().now()                  ;
+         return newLoginId
+
+     }
+
+
+     const dateNow = Date.now()                    ;
 
      const hash = createHash("sha256")             ;
 
-     hash.update(dataObject.password)              ;
+     hash.update("" + dataObject.password)         ;
 
      const passwordHash = hash.digest("hex")       ;
 
-     /*Remeber to implement regex validation for email*/
+     const regex = new RegExp("[a-zA-Z0-9.]+@[a-z]\.com");
+
+
+return "test"
+
+     if (!regex.exec(dataObject.email)) {
+
+         response.message = "Invalid email!";
+         response.success = false           ;
+         response.data    = null            ;
+         response.code    = 400             ;
+return "test"
+
+         return response                    ;
+
+     }
+
 
 
      let newUser = {
@@ -88,7 +106,7 @@ import   verifyMandatoryFields    from "./verifyMandatoryFields.js"       ;
 
 
 
-     login.push(newLoginObject)                    ;
+     logins.push(newLoginObject)                   ;
 
 
      users.push(newUser)                           ;
@@ -96,7 +114,7 @@ import   verifyMandatoryFields    from "./verifyMandatoryFields.js"       ;
      await db.write()                              ;
 
 
-
+return "test"
 
      return response                               ; // Success for validation
 

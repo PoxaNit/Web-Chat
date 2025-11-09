@@ -1,6 +1,6 @@
-import { JSONFile } from "lowdb/node";
-import { Low      } from "lowdb"     ;
-
+import { JSONFile }            from "lowdb/node"                 ;
+import { Low      }            from "lowdb"                      ;
+import   verifyMandatoryFields from "../verifyMandatoryFields.js";
 
 
  /*
@@ -29,6 +29,8 @@ import { Low      } from "lowdb"     ;
  */
 
 
+ verifyMandatoryFields("../../database/seeders", true, true);
+
  const adapter = new JSONFile("../../database/db.json");
  const db      = new Low(adapter, {})                  ;
 
@@ -40,7 +42,7 @@ import { Low      } from "lowdb"     ;
      const table = db?.[databaseTable];
 
 
-     if (!table) return null          ; // Table not found
+     if (!table) return "table not found"          ; // Table not found
 
      if (!(table.length > 0)) return 1; // If there's no registers in the table, return id 1 to the first register.
 
