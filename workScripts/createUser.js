@@ -1,26 +1,30 @@
-import   generateDatabaseId       from "./utilities/generateDatabaseId.js";
-import { JSONFile              }  from "lowdb/node"                       ;
-import { Low                   }  from "lowdb"                            ;
-import   verifyMandatoryFields    from "./verifyMandatoryFields.js"       ;
+import { fileURLToPath         } from "node:url"                         ;
+import   path                    from "node:path"                        ;
+import { readFile              } from "node:fs/promises";
+import   pool                    from "../database/database.js";
+
 
  const {
    createHash
  } = await import("node:crypto")                                   ;
 
 
+ // I've discovered late that LowDB sucks with multiple files
+ // handling the same db
 
 
- const adapter = new JSONFile("../database/db.json");
- const db      = new Low(adapter, {})               ;
- await db.read()                                    ;
+ const __filename = fileURLToPath(import.meta.url)  ;
+ const __dirname  = path.dirname(__filename)        ;
+ const dbPath     = path.resolve(__dirname, "../database/database.sqlite");
 
-
-// Ensure all the necessary fields in the database are existent
- verifyMandatoryFields("../database/seeders", true, true) ;
 
 
 
  async function createUser (dataObject) {
+
+     const conn = await pool.getConnection();
+
+
 
   // Default values
 
@@ -38,27 +42,6 @@ import   verifyMandatoryFields    from "./verifyMandatoryFields.js"       ;
 
 
 
-
-
-     const users = db.data?.users                  ;
-
-
-     const logins = db.data?.login                 ;
-
-
-     const newUserId = generateDatabaseId("users") ;
-
-
-     const newLoginId = generateDatabaseId("login");
-
-     if (!newLoginId) {
-
-
-         return newLoginId
-
-     }
-
-
      const dateNow = Date.now()                    ;
 
      const hash = createHash("sha256")             ;
@@ -67,10 +50,10 @@ import   verifyMandatoryFields    from "./verifyMandatoryFields.js"       ;
 
      const passwordHash = hash.digest("hex")       ;
 
-     const regex = new RegExp("[a-zA-Z0-9.]+@[a-z]\.com");
+     const regex = /^[a-zA-Z0-9.]+@[a-z]+\.com$/;
 
 
-return "test"
+
 
      if (!regex.exec(dataObject.email)) {
 
@@ -78,51 +61,82 @@ return "test"
          response.success = false           ;
          response.data    = null            ;
          response.code    = 400             ;
-return "test"
+
 
          return response                    ;
 
      }
 
 
+     try {
 
-     let newUser = {
-       id        : newUserId,
-       created_at: dateNow,
-       updated_at: dateNow,
-       name      : dataObject.name,
-       email     : dataObject.email,
-       password  : passwordHash
-     }                                             ;
 
-     const newLoginObject = {
-       id        : newLoginId,
-       created_at: dateNow,
-       updates_at: dateNow,
-       user_id   : newUserId,
-       is_logged : false
+         let stmt = `
+             SELECT id FROM users WHERE email = ?;
+         `;
+
+         let result = await conn.query(stmt, [dataObject.email]);
+
+         if (result?.length) {
+
+             response.message = "User already exists!";
+             response.success = false;
+             response.code = 400;
+             response.data =  null;
+
+             throw null;
+
+         }
+
+         stmt = `
+
+             INSERT INTO users
+             (
+               created_at,
+               updated_at,
+               name,
+               email,
+               password
+             )
+             VALUES (?, ?, ?, ?, ?);
+
+         `;
+
+         await conn.query(stmt, [dateNow, dateNow, dataObject.name, dataObject.email, passwordHash]);
+
+         // Get the id of just created user
+
+         stmt = `
+             SELECT id FROM users WHERE email = ?;
+         `;
+
+         result = await conn.query(stmt, [dataObject.email]);
+
+         stmt = `
+
+             INSERT INTO logins (
+               created_at,
+               updated_at,
+               user_id,
+               is_logged
+             ) VALUES (?, ?, ?, ?);
+
+         `;
+
+         await conn.query(stmt, [dateNow, dateNow, result[0].id, 0]);
+
+     } catch (err) {
+
+         throw err;
+
+     } finally {
+
+         await conn.release();
+
+         return response;
+
      }
 
-
-
-
-     logins.push(newLoginObject)                   ;
-
-
-     users.push(newUser)                           ;
-
-     await db.write()                              ;
-
-
-return "test"
-
-     return response                               ; // Success for validation
-
  }
-
-
-
-
-
 
  export default createUser                          ;

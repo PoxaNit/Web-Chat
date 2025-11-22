@@ -1,41 +1,57 @@
-import { Low }      from "lowdb";
-import { JSONFile } from "lowdb/node";
+import pool from "../database.js";
 
- /*
-   This script has a main function so the program can easily stop by return command
- */
 
- async function main () {
+ async function deleteTables () {
 
      console.log("Deleting all tables...");
 
-     const adapter = new JSONFile("../db.json");
-     const db      = new Low(adapter, {});
+     const conn = await pool.getConnection();
 
-     await db.read();
+     const tables = [
+       "users",
+       "messages",
+       "logins",
+       "groups"
+     ];
 
-     const hasTables = Object.keys(db.data).length > 0;
+     for (const table of tables) {
 
-     if (!hasTables) {
+         let command = `
+             SHOW CREATE TABLE ${table};
+         `;
 
-         console.log("No tables found");
+         try {
 
-         return;
+             const result = await conn.query(command);
+
+             if (result?.[0]?.Table) {
+
+                 console.log(`Deleting table: ${table}...`);
+
+                 command = `
+                     DROP TABLE ${table};
+                 `;
+
+                 await conn.query(command);
+
+                 console.log("DONE!");
+
+             }
+
+         } catch (e) {
+
+             if (e.code === "ER_NO_SUCH_TABLE") {
+
+                 console.log(`Table not exists: ${table}`);
+
+             }
+
+         }
 
      }
 
-     for (const table in db.data) {
-
-         console.log(`Deleting table: ${table}`);
-
-     }
-
-     db.data = {};
-
-     db.write();
-
-     console.log("DONE");
+     await conn.release();
 
  }
 
- main();
+ export default deleteTables;

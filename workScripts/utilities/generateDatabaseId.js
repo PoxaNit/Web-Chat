@@ -1,50 +1,28 @@
-import { JSONFile }            from "lowdb/node"                 ;
-import { Low      }            from "lowdb"                      ;
-import   verifyMandatoryFields from "../verifyMandatoryFields.js";
+import { JSONFile              } from "lowdb/node"                 ;
+import { Low                   } from "lowdb"                      ;
+import { fileURLToPath         } from "node:url"                   ;
+import   path                    from "node:path"                  ;
 
 
- /*
 
-    NOTE:
+ const __filename = fileURLToPath(import.meta.url)                ;
+ const __dirname  = path.dirname(__filename)                      ;
+ const dbPath     = path.join(__dirname, "../../database/db.json");
 
-      table    = property in first scope in the database's json onject
-
-      register = property inside the array that belongs to table
-
-      example:
-
-        database:
-
-          {
-            "a":[
-                  {...}, {...}, ...
-                ]
-          }
-
-      "a"   -> "table",
-      {...} -> "register"
-
-      It's used for better understanding and recognition
-
- */
-
-
- verifyMandatoryFields("../../database/seeders", true, true);
-
- const adapter = new JSONFile("../../database/db.json");
+ const adapter = new JSONFile(dbPath);
  const db      = new Low(adapter, {})                  ;
 
  await db.read()                                       ;
 
 
- function generateDatabaseId (databaseTable) {
-
-     const table = db?.[databaseTable];
+ async function generateDatabaseId (databaseField) {
 
 
-     if (!table) return "table not found"          ; // Table not found
+     const field = db.data?.[databaseField];
 
-     if (!(table.length > 0)) return 1; // If there's no registers in the table, return id 1 to the first register.
+     if (!field) return "field not found"          ; // Table not found
+
+     if (!(field.length > 0)) return 1; // If there's no registers in the table, return id 1 to the first register.
 
 
      let supportId = 0                ;
@@ -60,7 +38,7 @@ import   verifyMandatoryFields from "../verifyMandatoryFields.js";
  */
 
 
-     for (const row of table) {
+     for (const row of field) {
 
          if (row.id === (supportId + 1)) {
 
@@ -71,7 +49,7 @@ import   verifyMandatoryFields from "../verifyMandatoryFields.js";
          } else break;
 
      }
-
+console.log("function generateDatabaseId executed")
      return (supportId + 1)           ;
 
 

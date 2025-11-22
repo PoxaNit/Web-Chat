@@ -1,66 +1,79 @@
-import { JSONFile } from "lowdb/node";
-import { Low      } from "lowdb"     ;
-
- const adapter = new JSONFile("../database/db.json");
- const db      = new Low(adapter, {})               ;
-
+import pool from "../database/database.js";
 
  async function logout (userId) {
 
-     const arrayLogin = db.data.login;
+     let data = {
+         user: null
+     };
 
+     let response = {
+       message: "User is now logged out!",
+       success: true,
+       data: data,
+       code: 200
+     };
 
+     const conn = await pool.getConnection();
 
-     let data = null                 ;
+     try {
 
-     let response = { // Default value
-       "message": "User is now logged out",
-       "data"   : data,
-       "success": true,
-       "code"   : 200
-     }                               ;
+         // Verify if user not exists
 
+         let stmt = `
+             SELECT id FROM users WHERE id = ?;
+         `;
 
-     let userExists                  ;
+         let result = await conn.query(stmt, [userId]);
 
-     for (const login of arrayLogin) {
+         if (!result?.[0]?.id) { // User not exists
 
-         if (login.user_id === userId) {
+             response.message = "User not found";
+             response.success = false;
+             response.data = null;
+             response.code = 400;
 
-             userExists = true;
-
-             if (!login.is_logged) {
-
-                 response.message = "User is not logged in";
-                 response.success = false                  ;
-                 response.code    = 400                    ;
-
-             } else {
-
-                 login.is_logged = false;
-                 break                  ;
-
-             }
+             throw new Error(response.message);
 
          }
 
+
+         // Verify if user is already logged out
+
+         stmt = `
+             SELECT is_logged FROM logins WHERE user_id = ?;
+         `;
+
+         result = await conn.query(stmt, [userId]);
+
+         if (!result?.[0]?.is_logged) {
+
+             response.message = "User is already logged out!";
+             response.success = false;
+             response.data = null;
+             response.code = 400;
+
+             throw null; // Just stop the code execution
+
+         }
+
+         stmt = `
+             UPDATE logins SET is_logged = 0 WHERE user_id = ?;
+         `;
+
+         await conn.query(stmt, [userId]);
+
+     } catch (err) {
+
+         throw err;
+
+     } finally {
+
+         await conn.release();
+
+         return response;
+
      }
-
-
-     if (!userExists) {
-
-         response.message = "User not found";
-         response.success = false           ;
-         response.code    = 400             ;
-
-     }
-
-     db.data.login = arrayLogin      ;
-
-     await db.write()                ;
-
-     return JSON.stringify(response);
 
  }
 
- export default logout                              ;
+ export default logout;

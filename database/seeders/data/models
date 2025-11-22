@@ -1,15 +1,15 @@
 
 
- This is how each main object in the database must be.
+ This is how each main table in the database must be.
 
 
 
  Models:
 
 
- Model of object users:
+ Model of table users:
 
-   properties of object:
+   properties of table:
 
      id         -> numeric
      created_at -> string
@@ -20,9 +20,9 @@
 
 
 
- Model of object messages:
+ Model of table messages:
 
-   properties of object:
+   properties of table:
 
      id                -> numeric
      created_at        -> string
@@ -34,22 +34,22 @@
      status            -> string ("sent", "delivered", "read")
 
 
- Model of object groups:
+ Model of table groups:
 
-   properties of object:
+   properties of table:
 
      id              -> numeric
      created_at      -> string
      updated_at      -> string
      name            -> string
-     participant_ids -> number[]
-     admin_ids       -> number[]
+     participant_ids -> number[] (as json)
+     admin_ids       -> number[] (as json)
 
 
 
- Model of object login:
+ Model of table logins:
 
-   properties of object:
+   properties of table:
 
      id         -> numeric
      created_at -> string

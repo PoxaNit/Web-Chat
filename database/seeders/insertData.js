@@ -1,7 +1,13 @@
-import { JSONFile } from "lowdb/node"      ;
-import { Low      } from "lowdb"           ;
-import { readFile } from "node:fs/promises";
-import { glob     } from "glob"            ;
+import { readFile }      from "node:fs/promises";
+import { glob     }      from "glob"            ;
+import { fileURLToPath } from "node:url"        ;
+import   path            from "node:path"       ;
+import   pool            from "../database.js"  ;
+
+
+ const __filename = fileURLToPath(import.meta.url)            ;
+ const __dirname  = path.dirname(__filename)                  ;
+ const filesPath  = path.join(__dirname, "./data")
 
 
 
@@ -19,52 +25,53 @@ import { glob     } from "glob"            ;
 
 
 
- async function main () {
+ async function insertData () {
 
 
+     console.log("Inserting data in the database...")  ;
 
+     const files = await glob(filesPath + "/" + "*.json");
 
-     console.log("Inserting data in the database...")   ;
-     const adapter    = new JSONFile("../db.json")      ;
-     const db         = new Low(adapter, {})            ;
-     const files      = await glob("./data/" + "*.json");
-     await db.read()                                    ;
+     const conn = await pool.getConnection();
 
-
-
-
-
-
-     let noDataFound = true; // Temporary
 
 
      for (const file of files) {
 
-         const data = await readFile(file, "utf8")         ;
-         const parsed = JSON.parse(data)                   ;
+         const data = await readFile(file, "utf8");
+         const parsed = JSON.parse(data)          ;
 
-       // Each subseeder is the table name with .json extension
-         const tableName = file.split("/")[1].split(".")[0]; // expected: ["tableName", "json"]
 
-         if (parsed.length > 0) {
+         const tableName = file.split(".")[0]; // Following the convention to seeder names
 
-             noDataFound = false                          ;
-             console.log(`Filling table: ${tableName}`)   ;
-             db.data[tableName] = data.replace(/\s+/g, ""); // Avoid any spaces and line breaks
-             db.write()                                   ;
+
+         for (const dataToInsert of parsed) {
+             try {
+
+                 const fields = Object.keys(dataToInsert);
+
+                 const values = Object.values(dataToInsert):
+
+                 const command = `
+
+                     INSERT INTO ${tableName} (${fields})
+                     VALUES (${values})
+
+                 `;
+
+                 conn.query(command);
+
+             } catch (e) {
+
+                 if (e.code === "ER_NO_SUCH_")
+
+             }
 
          }
 
      }
 
 
-     if (noDataFound) {
-
-         console.log("No data found.");
-
-         return;
-
-     }
 
      console.log("DONE");
 
