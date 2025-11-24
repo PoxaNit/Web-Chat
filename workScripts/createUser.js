@@ -127,7 +127,16 @@ import   pool                    from "../database/database.js";
 
      } catch (err) {
 
-         throw err;
+         if (err?.code === "ER_NO_SUCH_TABLE") {
+
+             console.log(err.sqlMessage);
+
+         }
+
+         response.message = "Something worked wrong.";
+         response.code = 500;
+         response.data = null;
+         response.succes = false;
 
      } finally {
 
@@ -139,4 +148,4 @@ import   pool                    from "../database/database.js";
 
  }
 
- export default createUser                          ;
+ export default createUser;

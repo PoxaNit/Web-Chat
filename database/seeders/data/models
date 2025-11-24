@@ -1,58 +1,78 @@
+This is how each table in the database must be.
 
+Models:
 
- This is how each main table in the database must be.
+Model of table users:
 
+  Fields of table:
 
-
- Models:
-
-
- Model of table users:
-
-   properties of table:
-
-     id         -> numeric
-     created_at -> string
-     updated_at -> string
-     name       -> string
-     email      -> string
-     password   -> string
+    id         -> INT AUTO_INCREMENT PRIMARY KEY
+    created_at -> BIGINT
+    updated_at -> BIGINT
+    name       -> VARCHAR(255)
+    email      -> VARCHAR(255)
+    password   -> VARCHAR(255)
 
 
 
- Model of table messages:
+Model of table messages:
 
-   properties of table:
+  Fields of table:
 
-     id                -> numeric
-     created_at        -> string
-     updated_at        -> string
-     user_id           -> numeric
-     recipient_user_id -> numeric
-     content           -> string
-     read_at           -> string
-     status            -> string ("sent", "delivered", "read")
-
-
- Model of table groups:
-
-   properties of table:
-
-     id              -> numeric
-     created_at      -> string
-     updated_at      -> string
-     name            -> string
-     participant_ids -> number[] (as json)
-     admin_ids       -> number[] (as json)
+    id                 -> INT AUTO_INCREMENT PRIMARY KEY
+    created_at         -> BIGINT
+    updated_at         -> BIGINT
+    user_id            -> INT
+    recipient_user_id  -> INT
+    recipient_group_id -> INT
+    content            -> TEXT
 
 
 
- Model of table logins:
+Model of table message_status:
 
-   properties of table:
+  Fields of table:
 
-     id         -> numeric
-     created_at -> string
-     updated_at -> string
-     user_id    -> numeric
-     is_logged  -> boolean
+    id         -> INT AUTO_INCREMENT PRIMARY KEY
+    created_at -> BIGINT
+    updated_at -> BIGINT
+    message_id -> INT
+    user_id    -> INT
+    status     -> ENUM('sent', 'delivered', 'read')
+
+
+
+Model of table groups:
+
+  Fields of table:
+
+    id              -> INT AUTO_INCREMENT PRIMARY KEY
+    created_at      -> BIGINT
+    updated_at      -> BIGINT
+    name            -> VARCHAR(255)
+    creator_user_id -> INT
+
+
+
+Model of table group_participants:
+
+  Fields of table:
+
+    id         -> INT AUTO_INCREMENT PRIMARY KEY
+    created_at -> BIGINT
+    updated_at -> BIGINT
+    group_id   -> INT
+    user_id    -> INT
+    role       -> ENUM('user', 'admin')
+
+
+
+Model of table logins:
+
+  Fields of table:
+
+    id         -> INT AUTO_INCREMENT PRIMARY KEY
+    created_at -> BIGINT
+    updated_at -> BIGINT
+    user_id    -> INT
+    is_logged  -> TINYINT(1)

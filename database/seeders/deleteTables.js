@@ -1,57 +1,52 @@
 import pool from "../database.js";
 
+async function deleteTables () {
 
- async function deleteTables () {
+    console.log("Deleting all tables...");
 
-     console.log("Deleting all tables...");
+    const conn = await pool.getConnection();
 
-     const conn = await pool.getConnection();
+    const tables = [
+        "message_status",
+        "group_participants",
+        "messages",
+        "groups",
+        "logins",
+        "users"
+    ];
 
-     const tables = [
-       "users",
-       "messages",
-       "logins",
-       "groups"
-     ];
+    for (const table of tables) {
 
-     for (const table of tables) {
+        let command = `
+            SHOW CREATE TABLE ${table};
+        `;
 
-         let command = `
-             SHOW CREATE TABLE ${table};
-         `;
+        try {
+            const result = await conn.query(command);
 
-         try {
+            if (result?.[0]?.Table) {
 
-             const result = await conn.query(command);
+                console.log(`Deleting table: ${table}...`);
 
-             if (result?.[0]?.Table) {
+                command = `
+                    DROP TABLE ${table};
+                `;
 
-                 console.log(`Deleting table: ${table}...`);
+                await conn.query(command);
 
-                 command = `
-                     DROP TABLE ${table};
-                 `;
+                console.log("DONE!");
+            }
 
-                 await conn.query(command);
+        } catch (e) {
 
-                 console.log("DONE!");
+            if (e.code === "ER_NO_SUCH_TABLE") {
 
-             }
+                console.log(`Table not exists: ${table}`);
+            }
+        }
+    }
 
-         } catch (e) {
+    await conn.release();
+}
 
-             if (e.code === "ER_NO_SUCH_TABLE") {
-
-                 console.log(`Table not exists: ${table}`);
-
-             }
-
-         }
-
-     }
-
-     await conn.release();
-
- }
-
- export default deleteTables;
+export default deleteTables;
