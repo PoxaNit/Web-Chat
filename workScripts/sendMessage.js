@@ -3,7 +3,7 @@ import pool from "../database/database.js";
  async function sendMessage (data) {
 
      const {
-       user_id,
+       user_id, // The sender
        recipient_user_id = null,
        recipient_group_id = null,
        content
@@ -15,12 +15,12 @@ import pool from "../database/database.js";
 
      }
 
-     let data = null;
+     let dataToSend = null;
 
      let response = {
        message: "Message sent!",
        success: true,
-       data: data,
+       data: dataToSend,
        code: 200
      }
 
@@ -111,7 +111,7 @@ import pool from "../database/database.js";
                    recipient_user_id,
                    recipient_group_id,
 		   content
-                 ) VALUES (?, ?, ?, ?) RETURNING id;
+                 ) VALUES (?, ?, ?, ?, ?, ?) RETURNING id;
              `;
 
              const message_id = await conn.query(stmt, [
@@ -139,7 +139,7 @@ import pool from "../database/database.js";
 		 await conn.query(stmt, [
 		   dateNow,
 		   dateNow,
-		   message_id,
+		   message_id[0].id,
 		   recipient_user_id,
 		   "sent"
 		 ]);
@@ -167,8 +167,8 @@ import pool from "../database/database.js";
 		     await conn.query(stmt, [
 		       dateNow,
 		       dateNow,
-		       message_id,
-		       userId,
+		       message_id[0].id,
+		       userId.user_id,
 		       "sent"
 		     ]);
 

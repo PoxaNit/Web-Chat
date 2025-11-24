@@ -1,5 +1,11 @@
 import pool from "../database/database.js";
 
+ function error (message, code) {
+
+     return {message: message, success: false, data: null, code: code};
+
+ }
+
  async function createGroup (creatorUserId, groupName) {
 
      let data = null;
@@ -27,33 +33,14 @@ import pool from "../database/database.js";
 
          if (!result?.length) {
 
-             repsonse.message = "User not found";
-             response.success = false;
-             response.data = null;
-             response.code = 400;
+             response = error("User not found", 400);
 
-             throw null;
+             throw new Error(response.message);
 
          }
 
-       // Verify if group already exists
 
-         stmt = `
-             SELECT id FROM groups WHERE id = ?;
-         `;
-
-         result = await conn.query(stmt, [groupId]);
-
-         if (!result?.length) {
-
-             repsonse.message = "User not found";
-             response.success = false;
-             response.data = null;
-             response.code = 400;
-
-             throw null;
-
-         }
+     // Creating group
 
          stmt = `
            INSERT INTO groups (
@@ -61,19 +48,39 @@ import pool from "../database/database.js";
              updated_at,
              name,
              creator_user_id
-           ) VALUES (?, ?, ?, ?);
+           ) VALUES (?, ?, ?, ?) RETURNING id;
          `;
 
-         await conn.query(stmt, [
+         const group_id = await conn.query(stmt, [
            dateNow,
            dateNow,
            groupName,
            creatorUserId
          ]);
 
+    // Creating record in group_participants
+
+         stmt = `
+	     INSERT INTO group_participants (
+	       created_at,
+	       updated_at,
+	       group_id,
+	       user_id,
+	       role
+             ) VALUES (?, ?, ?, ?, ?);
+         `;
+
+         await conn.query(stmt, [
+	   dateNow,
+	   dateNow,
+	   group_id[0].id,
+	   creatorUserId,
+	   "admin"
+	 ]);
+
      } catch (err) {
 
-         if (err?.code === "ER_NO_SUCH_TABLE") console.log(err.sqlMessage);
+         console.log("Error: ", err)
 
      } finally {
 
