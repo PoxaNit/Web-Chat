@@ -154,6 +154,10 @@ import pool from "../database/database.js";
 
 		 for (const userId of group_user_ids) {
 
+                   // Prevents to not send the message to the user sender (it not makes sense)
+
+                     if (userId.user_id === user_id) continue;
+
 		     stmt = `
 		         INSERT INTO message_status (
 		           created_at,

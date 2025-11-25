@@ -59,10 +59,11 @@ import pool from "../database/database.js";
        // Verifying if user is already in the group
 
          stmt = `
-             SELECT user_id FROM group_participants WHERE user_id = ?;
+             SELECT user_id FROM group_participants
+             WHERE group_id = ? AND user_id = ?;
          `;
 
-         result = await conn.query(stmt, [user_id]);
+         result = await conn.query(stmt, [user_id, group_id]);
 
          if (result?.length) {
 
