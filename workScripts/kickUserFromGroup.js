@@ -6,7 +6,7 @@ import pool from "../database/database.js";
 
  }
 
- async function putUserOutGroup (
+ async function kickUserFromGroup (
    adminUserId, // Who take out the user from group
    userId, // User who was kicked from the group
    groupId
@@ -61,7 +61,7 @@ import pool from "../database/database.js";
 
          stmt = `
              SELECT id FROM group_participants
-             WHERE group_id = ? AND user_id = ? OR user_id = ?;
+             WHERE group_id = ? AND (user_id = ? OR user_id = ?);
          `;
 
          result = await conn.query(stmt, [groupId, userId, adminUserId]);
@@ -116,4 +116,4 @@ import pool from "../database/database.js";
 
  }
 
- export default putUserOutGroup;
+ export default kickUserFromGroup;
