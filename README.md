@@ -505,3 +505,52 @@ update_message
       message_id: <int>
       content: <string>
     }
+
+
+
+## 📦 Event System Response Codes
+
+### ✅ Success Codes (100–199)
+
+| Code | Name                  | Description |
+|------|------------------------|-------------|
+| 100  | OK                    | Generic success response |
+| 101  | CONNECTED             | Successfully connected to the WebSocket server |
+| 102  | AUTH_SUCCESS          | Authentication completed successfully |
+| 103  | MESSAGE_SENT          | Message delivered |
+| 104  | MESSAGES_HISTORY      | History messages fetched successfully |
+| 105  | PING_RESPONSE         | Pong response from server health check |
+
+---
+
+### ⚠️ Client Errors (200–299)
+
+| Code | Name                  | Description |
+|------|-----------------------|-------------|
+| 200  | BAD_REQUEST           | Invalid or malformed client request |
+| 201  | INVALID_EVENT         | Event does not exist or is not allowed |
+| 202  | INVALID_PAYLOAD       | Payload missing fields or formatted incorrectly |
+| 203  | AUTH_REQUIRED         | Action requires authentication |
+| 204  | INVALID_TOKEN         | Token invalid or expired |
+| 205  | USER_NOT_FOUND        | Target user does not exist |
+| 206  | MESSAGE_TOO_LONG      | Message exceeds character limit |
+| 207  | EMPTY_MESSAGE         | Empty content was sent |
+| 208  | FLOODING_DETECTED     | User sending messages too frequently |
+| 209  | RESOURCE_FORBIDDEN    | Operation not allowed |
+| 210  | UNSUPPORTED_VERSION   | Client version not supported |
+
+---
+
+### 💀 Server Errors (300–399)
+
+| Code | Name                   | Description |
+|------|------------------------|-------------|
+| 300  | SERVER_ERROR           | Generic server crash |
+| 301  | DATABASE_ERROR         | Database connection or query failure |
+| 302  | INTERNAL_EXCEPTION     | Unexpected exception caught |
+| 303  | SERVICE_UNAVAILABLE    | Service temporarily offline |
+| 304  | MESSAGE_DELIVERY_FAILED| Could not deliver message |
+| 305  | TIMEOUT                | Timeout occurred |
+| 306  | DEPENDENCY_FAILURE     | External service or module failed |
+
+---
