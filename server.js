@@ -2,16 +2,18 @@ import { WebSocketServer } from "ws"                         ;
 import   express           from "express"                    ;
 import   fs                from "node:fs"                    ;
 import   createUser        from "./workScripts/createUser.js";
+import   dotenv            from "dotenv";
+import   process           from "node:process";
 
 
-
+ dotenv.config({path: "./.env"});
 
 
 
  // HTTP SERVER
 
  const app      = express();
- const httpPort = 8080;
+ const httpPort = process.env.http_server_port;
 
 
 
@@ -42,13 +44,6 @@ import   createUser        from "./workScripts/createUser.js";
 
  });
 
- app.post("/users", (req, res) => {
-
-     
-
- });
-
-
 
  /* ------------------------ ROUTES - END ---------------------*/
 
@@ -60,25 +55,16 @@ import   createUser        from "./workScripts/createUser.js";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  app.use(express.static("./static"));
 
- const wsPort = 8081;
+
+
+
+
+
+
+
+ const wsPort = ws_server_port;
 
  const wss = new WebSocketServer({ port: wsPort });
 
