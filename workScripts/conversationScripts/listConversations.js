@@ -1,9 +1,9 @@
 import pool from "../../database/database.js";
 import error from "../error.js";
 
- async function listConversations (userId) {
+ async function listConversations (message) {
 
-   // It returns all co versations that user is in
+     const { user_id } = message.payload;
 
      let data = {
        conversations: []
@@ -13,7 +13,7 @@ import error from "../error.js";
        message: "OK",
        success: true,
        data: data,
-       code: 200
+       code: 100
      }
 
      const conn = await pool.getConnection();
@@ -26,24 +26,22 @@ import error from "../error.js";
              SELECT id FROM users WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [userId]);
+         let result = await conn.query(stmt, [user_id]);
 
          if (!result?.length) {
 
-             response = error("User not found!", 404);
-
-             throw new Error(response.message);
+             return error("User not found!", 205);
 
          }
 
-       // Getting all conversations user is in
+       // Getting all conversations where user is in
 
          stmt = `
              SELECT * FROM conversations
              WHERE user1_id = ? OR user2_id = ?;
          `;
 
-         const conversations = await conn.query(stmt, [userId]);
+         const conversations = await conn.query(stmt, [user_id, user_id]);
 
        // If no conversations found, client take care about this
 
@@ -63,7 +61,7 @@ import error from "../error.js";
                  AND message_status.status != 'read';
              `;
 
-             const not_read_messages = await conn.query(stmt, [userId, conversation.id]);
+             const not_read_messages = await conn.query(stmt, [user_id, conversation.id]);
 
 
          // Getting the last message
@@ -79,7 +77,7 @@ import error from "../error.js";
                  LIMIT 1;
              `;
 
-             const last_message = await conn.query(stmt, [userId, conversation.id]);
+             const last_message = await conn.query(stmt, [user_id, conversation.id]);
 
 
              let dataToPush = {
@@ -92,15 +90,17 @@ import error from "../error.js";
 
          }
 
+         return response;
+
      } catch (err) {
 
-         console.log("Error: ", err);
+         console.log("Internal Server Error: ", err);
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

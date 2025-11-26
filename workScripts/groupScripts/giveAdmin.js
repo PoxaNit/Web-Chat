@@ -1,7 +1,9 @@
 import pool from "../database/database.js";
 import error from "../error.js";
 
- async function giveAdmin (adminUserId, userId, groupId) {
+ async function giveAdmin (message) {
+
+     const { user_id, group_id } = message.payload;
 
      let data = null;
 
@@ -9,7 +11,7 @@ import error from "../error.js";
        message: "User now is admin!",
        success: true,
        data: data,
-       code: 200
+       code: 107
      }
 
      const conn = await pool.getConnection();
@@ -20,16 +22,14 @@ import error from "../error.js";
 
          let stmt = `
              SELECT id FROM users
-             WHERE id = ? OR id = ?;
+             WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [adminUserId, userId]);
+         let result = await conn.query(stmt, [user_id]);
 
-         if (!(result?.length === 2)) {
+         if (!result?.length) {
 
-             response = error("Admin or user not found", 404);
-
-             throw new Error(response.message);
+             return error("User not found", 205);
 
          }
 
@@ -40,32 +40,11 @@ import error from "../error.js";
              WHERE id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId]);
+         result = await conn.query(stmt, [group_id]);
 
          if (!result?.length) {
 
-             response = error("Group not found", 404);
-
-             throw new Error(response.message);
-
-         }
-
-
-       // Verifying if admin is really admin
-
-         stmt = `
-             SELECT user_id FROM group_participants
-             WHERE group_id = ? AND user_id = ?
-             AND role = 'admin';
-         `;
-
-         result = await conn.query(stmt, [groupId, adminUserId]);
-
-         if (!result?.length) {
-
-             response = error("User is not admin!", 400);
-
-             throw new Error(response.message);
+             return error("Group not found", 205);
 
          }
 
@@ -78,31 +57,27 @@ import error from "../error.js";
              AND user_id = ? AND role = 'admin';
          `;
 
-         result = await conn.query(stmt, [groupId, userId]);
+         result = await conn.query(stmt, [group_id, user_id]);
 
          if (result?.length) {
 
-             response = error("User is already admin!", 400);
-
-             throw new Error(response.message);
+             return error("User is already admin!", 209);
 
          }
 
-       // Verifying if admin and user are in the group
+       // Verifying if user is in the group
 
          stmt = `
              SELECT user_id FROM group_participants
              WHERE group_id = ?
-             AND (user_id = ? OR user_id = ?);
+             AND user_id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId, adminUserId, userId]);
+         result = await conn.query(stmt, [group_id, user_id]);
 
-         if (!(result?.length === 2)) {
+         if (!result?.length) {
 
-             response = error("Admin or user is not in the group", 400);
-
-             throw new Error(response.message);
+             return error("User is not in the group", 209);
 
          }
 
@@ -114,17 +89,19 @@ import error from "../error.js";
              WHERE group_id = ? AND user_id = ?;
          `;
 
-         await conn.query(stmt, [groupId, userId]);
+         await conn.query(stmt, [group_id, user_id]);
+
+         return response;
 
      } catch (err) {
 
-         console.log("Error: ", err);
+         console.log("Internal Server Error: ", err);
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

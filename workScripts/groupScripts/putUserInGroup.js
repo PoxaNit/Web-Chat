@@ -1,12 +1,10 @@
 import pool from "../database/database.js";
+import error from "../error.js";
 
- function error (message, code) {
-
-     return {message: message, success: false, data: null, code: code};
-
- }
 
  async function putUserInGroup (user_id, group_id) {
+
+     const { user_id, group_id } = message.payload;
 
      let data = null;
 
@@ -14,7 +12,7 @@ import pool from "../database/database.js";
        message: "User is now in the group!",
        success: true,
        data: data,
-       code: 200
+       code: 107
      }
 
      const dateNow = Date.now();
@@ -33,9 +31,7 @@ import pool from "../database/database.js";
 
          if (!result?.length) {
 
-             response = error("User not found", 400);
-
-             throw new Error(response.message);
+             return error("User not found", 205);
 
          }
 
@@ -49,9 +45,7 @@ import pool from "../database/database.js";
 
          if (!result?.length) {
 
-             response = error("Group not found", 400);
-
-             throw new Error(response.message);
+             return error("Group not found", 205);
 
          }
 
@@ -67,9 +61,7 @@ import pool from "../database/database.js";
 
          if (result?.length) {
 
-             response = error("User is already in the group");
-
-             throw new Error(response.message);
+             return error("User is already in the group", 209);
 
          }
 
@@ -93,15 +85,17 @@ import pool from "../database/database.js";
 	   "user"
          ]);
 
+          return response;
+
      } catch (err) {
 
-         console.log("Error: ", err);
+         console.log("Internal Server Error: ", err);
+
+          return response;
 
      } finally {
 
           await conn.release();
-
-          return response;
 
      }
 

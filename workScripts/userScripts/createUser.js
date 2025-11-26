@@ -1,44 +1,32 @@
-import { fileURLToPath         } from "node:url"                         ;
-import   path                    from "node:path"                        ;
-import { readFile              } from "node:fs/promises";
-import   pool                    from "../database/database.js";
-
+import pool from "../../database/database.js";
+import error from "../error.js";
 
  const {
    createHash
  } = await import("node:crypto")                                   ;
 
 
- // I've discovered late that LowDB sucks with multiple files
- // handling the same db
 
+ async function createUser (message) {
 
- const __filename = fileURLToPath(import.meta.url)  ;
- const __dirname  = path.dirname(__filename)        ;
- const dbPath     = path.resolve(__dirname, "../database/database.sqlite");
-
-
-
-
- async function createUser (dataObject) {
-
-     const conn = await pool.getConnection();
-
-
-
-  // Default values
+     const { name, email, password } = message.payload;
 
      let data = {
-       user: dataObject
+       user: {
+         name: name,
+         email: email,
+         id: null
+       }
      }
 
      let response = {
        "message": "User created!",
        "success": true,
        "data"   : data,
-       "code"   : 201
+       "code"   : 106
      }
 
+     const conn = await pool.getConnection();
 
 
 
@@ -46,7 +34,7 @@ import   pool                    from "../database/database.js";
 
      const hash = createHash("sha256")             ;
 
-     hash.update("" + dataObject.password)         ;
+     hash.update("" + password);
 
      const passwordHash = hash.digest("hex")       ;
 
@@ -55,15 +43,9 @@ import   pool                    from "../database/database.js";
 
 
 
-     if (!regex.exec(dataObject.email)) {
+     if (!regex.exec(email)) {
 
-         response.message = "Invalid email!";
-         response.success = false           ;
-         response.data    = null            ;
-         response.code    = 400             ;
-
-
-         return response                    ;
+         return error("Invalid email!", 202);
 
      }
 
@@ -75,16 +57,11 @@ import   pool                    from "../database/database.js";
              SELECT id FROM users WHERE email = ?;
          `;
 
-         let result = await conn.query(stmt, [dataObject.email]);
+         let result = await conn.query(stmt, [email]);
 
          if (result?.length) {
 
-             response.message = "User already exists!";
-             response.success = false;
-             response.code = 400;
-             response.data =  null;
-
-             throw null;
+             return error("User already exists", 209);
 
          }
 
@@ -102,15 +79,8 @@ import   pool                    from "../database/database.js";
 
          `;
 
-         await conn.query(stmt, [dateNow, dateNow, dataObject.name, dataObject.email, passwordHash]);
+         await conn.query(stmt, [dateNow, dateNow, name, email, passwordHash]);
 
-         // Get the id of just created user
-
-         stmt = `
-             SELECT id FROM users WHERE email = ?;
-         `;
-
-         result = await conn.query(stmt, [dataObject.email]);
 
          stmt = `
 
@@ -125,24 +95,19 @@ import   pool                    from "../database/database.js";
 
          await conn.query(stmt, [dateNow, dateNow, result[0].id, 0]);
 
+         response.data.user.id = result[0].id;
+
+         return response;
+
      } catch (err) {
 
-         if (err?.code === "ER_NO_SUCH_TABLE") {
+         console.log("Internal Server Error: ", err);
 
-             console.log(err.sqlMessage);
-
-         }
-
-         response.message = "Something worked wrong.";
-         response.code = 500;
-         response.data = null;
-         response.succes = false;
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

@@ -1,7 +1,9 @@
 import pool from "../database/database.js";
 import error from "../error.js";
 
- async function takeAdmin (adminUserId, admin2UserId, groupId) {
+ async function takeAdmin (message) {
+
+     const { group_id, user_id } = message.payload;
 
      let data = null;
 
@@ -9,27 +11,25 @@ import error from "../error.js";
        message: "User now is not admin!",
        success: true,
        data: data,
-       code: 200
+       code: 107
      }
 
      const conn = await pool.getConnection();
 
      try {
 
-       // Verifying if admin and user exists
+       // Verifying if user admin exists
 
          let stmt = `
              SELECT id FROM users
-             WHERE id = ? OR id = ?;
+             WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [adminUserId, admin2UserId]);
+         let result = await conn.query(stmt, [user_id]);
 
-         if (!(result?.length === 2)) {
+         if (!result?.length) {
 
-             response = error("Admin or user not found", 404);
-
-             throw new Error(response.message);
+             return error("User not found", 205);
 
          }
 
@@ -40,52 +40,48 @@ import error from "../error.js";
              WHERE id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId]);
+         result = await conn.query(stmt, [group_id]);
 
          if (!result?.length) {
 
-             response = error("Group not found", 404);
-
-             throw new Error(response.message);
-
-         }
-
-       // Verifying if admins are really admins
-
-         stmt = `
-             SELECT user_id FROM group_participants
-             WHERE group_id = ? AND (user_id = ? OR user_id = ?)
-             AND role = 'admin';
-         `;
-
-         result = await conn.query(stmt, [groupId, adminUserId, admin2UserId]);
-
-         if (!result?.length) {
-
-             response = error("Some user is not admin!", 400);
-
-             throw new Error(response.message);
+             return error("Group not found", 205);
 
          }
 
 
-       // Verifying if admins are in the group
+       // Verifying if user is in the group
 
          stmt = `
              SELECT user_id FROM group_participants
              WHERE group_id = ?
-             AND (user_id = ? OR user_id = ?);
+             AND user_id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId, adminUserId, admin2UserId]);
+         result = await conn.query(stmt, [group_id, user_id]);
 
          if (!(result?.length === 2)) {
 
-             response = error("Admin or user is not in the group", 400);
-
-             throw new Error(response.message);
+             return error("User is not in the group", 209);
 
          }
+
+       // Verifying if user is really admin
+
+         stmt = `
+             SELECT user_id FROM group_participants
+             WHERE group_id = ? AND user_id = ?
+             AND role = 'admin';
+         `;
+
+         result = await conn.query(stmt, [group_id, user_id]);
+
+         if (!result?.length) {
+
+             return error("User is not admin!", 209);
+
+         }
+
+
 
        // Verifying if there's more than one user in the group
 
@@ -94,14 +90,12 @@ import error from "../error.js";
              WHERE group_id = ? AND role = 'admin';
          `;
 
-         result = await conn.query(stmt, [groupId]);
+         result = await conn.query(stmt, [group_id]);
 
 
          if (result?.length === 1) {
 
-             response = error("Cannot remove admin: last admin in the group", 400)
-
-             throw new Error(response.message);
+             return error("Cannot remove role admin from user: last admin in the group", 209)
 
          }
 
@@ -113,17 +107,19 @@ import error from "../error.js";
              WHERE group_id = ? AND user_id = ?;
          `;
 
-         await conn.query(stmt, [groupId, admin2UserId]);
+         await conn.query(stmt, [group_id, user_id]);
+
+         return response;
 
      } catch (err) {
 
-         console.log("Error: ", err);
+         console.log("Internal Server Error: ", err);
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

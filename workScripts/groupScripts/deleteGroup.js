@@ -1,12 +1,10 @@
 import pool from "../database/database.js";
+import error from "../error.js";
 
- function error (message, code) {
 
-     return {message: message, code: code, success: false, data: null};
+ async function deleteGroup (message) {
 
- }
-
- async function deleteGroup (adminUserId, groupId) {
+     const { admin_user_id, group_id } = message.payload;
 
      let data = null;
 
@@ -27,13 +25,11 @@ import pool from "../database/database.js";
              SELECT id FROM users WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [adminUserId]);
+         let result = await conn.query(stmt, [admin_user_id]);
 
          if (!result?.length) {
 
-              response = error("Admin user not found", 400);
-
-              throw new Error(response.message);
+              return error("Admin user not found", 205);
 
          }
 
@@ -43,13 +39,11 @@ import pool from "../database/database.js";
              SELECT id FROM groups WHERE id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId]);
+         result = await conn.query(stmt, [group_id]);
 
          if (!result?.length) {
 
-             response = error("Group not found", 400);
-
-             throw new Error(response.message);
+             return error("Group not found", 205);
 
          }
 
@@ -61,13 +55,11 @@ import pool from "../database/database.js";
              AND role = 'admin';
          `;
 
-         result = await conn.query(stmt, [groupId, adminUserId]);
+         result = await conn.query(stmt, [group_id, admin_user_id]);
 
          if (!result?.length) {
 
-             response = error("User is not admin", 400);
-
-             throw new Error(response.message);
+             return error("User is not admin", 209);
 
          }
 
@@ -79,26 +71,26 @@ import pool from "../database/database.js";
              WHERE group_id = ?;
          `;
 
-         await conn.query(stmt, [groupId]);
+         await conn.query(stmt, [group_id]);
 
 
          stmt = `
              DELETE FROM groups WHERE id = ?;
          `;
 
-         await conn.query(stmt, [groupId]);
+         await conn.query(stmt, [group_id]);
 
-
+         return response;
 
      } catch (err) {
 
          console.log("Error: ", err);
 
+         return response;
+
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

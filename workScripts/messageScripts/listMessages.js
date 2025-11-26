@@ -1,67 +1,36 @@
 import pool from "../../database/database.js";
 import error from "../error.js";
 
- async function listMessages (userId) {
+async function listMessages(message) {
 
-     let data = {
-       messages: []
-     }
+  const { conversation_id } = message.payload;
 
-     let response = {
-       message: "OK",
-       success: true,
-       data: data,
-       code: 200
-     }
+  let response = {
+    message: "OK",
+    success: true,
+    data: { messages: [] },
+    code: 100
+  };
 
-     const conn = await pool.getConnection();
+  const conn = await pool.getConnection();
 
-     try {
+  try {
+    let stmt = `
+      SELECT * FROM messages
+      WHERE conversation_id = ?
+    `;
+    const messages = await conn.query(stmt, [conversation_id]);
 
-       // Verifying if user exists
+    response.data.messages = messages;
+    return response;
 
-        let stmt = `
-            SELECT id FROM users WHERE id = ?;
-        `;
+  } catch (err) {
+    console.log("Error:", err);
+    return error("Internal server error", 301);
 
-        let result = await conn.query(stmt, [userId]);
+  } finally {
+    await conn.release();
+  }
+}
 
-        if (!result?.length) {
-
-            response = error("User not found", 404);
-
-            throw new Error(response.message);
-
-        }
-
-      // Getting all messages to user
-
-        stmt = `
-            SELECT *
-            FROM messages
-            INNER JOIN message_status
-            ON messages.id = message_status.message_id
-            WHERE message_status.user_id = ?;
-        `;
-
-        const messages = await conn.query(stmt, [userId]);
-
-      // Including data to send
-
-         response.data.messages = messages;
-
-     } catch (err) {
-
-         console.log("Error: ", err);
-
-     } finally {
-
-         await conn.release();
-
-         return response;
-
-     }
-
- }
-
- export default listMessages;
+export default listMessages;

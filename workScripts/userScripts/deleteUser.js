@@ -1,6 +1,9 @@
 import pool from "../database/database.js";
+import error from "../error.js";
 
- async function deleteUser (userId) {
+ async function deleteUser (message) {
+
+     const { user_id } = message.payload;
 
      let data = null;
 
@@ -8,7 +11,7 @@ import pool from "../database/database.js";
        message: "User deleted!",
        success: true,
        data: data,
-       code: 200
+       code: 108
      };
 
      const conn = await pool.getConnection();
@@ -19,16 +22,11 @@ import pool from "../database/database.js";
              SELECT id FROM users WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [userId]);
+         let result = await conn.query(stmt, [user_id]);
 
-         if (!result?.[0]?.id) {
+         if (!result?.length) {
 
-             response.message = "User not found";
-             response.success = false;
-             response.data = null;
-             response.code = 400;
-
-             throw null;
+             return error("User not found", 205);
 
          }
 
@@ -38,15 +36,17 @@ import pool from "../database/database.js";
 
          await conn.query(stmt, [userId]);
 
+         return response;
+
      } catch (err) {
 
-         throw err;
+         console.log("Internal Server Error: ", err);
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

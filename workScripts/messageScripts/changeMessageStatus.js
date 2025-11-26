@@ -1,104 +1,57 @@
 import pool from "../../database/database.js";
 import error from "../error.js";
 
- async function changeMessageStatus (
-   messageId,
-   userId,
-   status // delivered | read
- ) {
+async function changeMessageStatus(message) {
 
-     let data = null;
+  const { message_id, user_id, status } = message.payload;
 
-     let response = {
-       message: "Message status updated!",
-       success: true,
-       data: data,
-       code: 200
-     }
+  let response = {
+    message: "Message status updated!",
+    success: true,
+    data: { message_id: message_id, content: null},
+    code: 100
+  };
 
-     const conn = await pool.getConnection();
+  const conn = await pool.getConnection();
 
-     try {
+  try {
 
-       // Verifying if message exists
+    let stmt = `SELECT content FROM messages WHERE id = ?`;
+    const message = await conn.query(stmt, [message_id]);
+    if (!messages?.length) return error("Message not found", 202);
 
-         let stmt = `
-             SELECT id FROM messages WHERE id = ?;
-         `;
+    stmt = `SELECT id FROM users WHERE id = ?`;
+    let result = await conn.query(stmt, [user_id]);
+    if (!result?.length) return error("User not found", 202);
 
-         let result = await conn.query(stmt, [messageId]);
+    if (!(status === "delivered" || status === "read")) {
+      return error("Status not allowed", 201);
+    }
 
-         if (!result?.length) {
+    stmt = `
+      SELECT id FROM message_status
+      WHERE message_id = ? AND user_id = ?
+    `;
+    result = await conn.query(stmt, [message_id, user_id]);
+    if (!result?.length) return error("Message status not found", 202);
 
-             response = error("Message not found", 404);
+    stmt = `
+      UPDATE message_status SET status = ?
+      WHERE message_id = ? AND user_id = ?
+    `;
+    await conn.query(stmt, [status, message_id, user_id]);
 
-             throw new Error(response.message);
+    response.data.content = message[0].content;
 
-         }
+    return response;
 
-       // Verifying if user exists
+  } catch (err) {
+    console.log("Error:", err);
+    return error("Internal server error", 301);
 
-         stmt = `
-             SELECT id FROM users WHERE id = ?;
-         `;
+  } finally {
+    await conn.release();
+  }
+}
 
-         result = await conn.query(stmt, [userId]);
-
-         if (!result?.length) {
-
-             response = error("User not found", 404);
-
-             throw new Error(response.message);
-
-         }
-
-
-      // Verifying if status is allowed
-         if (!(status === "delivered" || status === "read")) {
-
-             response = error("Status not allowed!", 400);
-
-             throw new Error(response.message);
-
-         }
-
-      // Verifying if message status exists
-
-         stmt = `
-             SELECT id FROM message_status
-             WHERE message_id = ? AND user_id = ?;
-         `;
-
-         result = await conn.query(stmt, [messageId, userId]);
-
-         if (!result?.length) {
-
-             response = error("Message status not found for update!", 404);
-
-             throw new Error(response.message);
-
-         }
-
-         stmt = `
-             UPDATE message_status
-             SET status = ?
-             WHERE message_id = ? AND user_id = ?;
-         `;
-
-         await conn.query(stmt, [status, messageId, userId]);
-
-     } catch (err) {
-
-         console.log("Error: ", err);
-
-     } finally {
-
-         await conn.release();
-
-         return response;
-
-     }
-
- }
-
- export default changeMessageStatus;
+export default changeMessageStatus;

@@ -1,7 +1,9 @@
 import pool from "../../database/database.js";
 import error from "../error.js";
 
- async function inviteToGroup (inviterId, invitedId, groupId) {
+ async function inviteToGroup (message) {
+
+     const { inviter_id, invited_id, group_id } = message.payload;
 
      let data = null;
 
@@ -9,7 +11,7 @@ import error from "../error.js";
        message: "Invite sent!",
        success: true,
        data: data,
-       code: 200
+       code: 103
      }
 
      const dateNow = Date.now();
@@ -25,13 +27,11 @@ import error from "../error.js";
              WHERE id = ? OR id = ?;
          `;
 
-         let result = await conn.query(stmt, [inviterId, invitedId]);
+         let result = await conn.query(stmt, [inviter_id, invited_id]);
 
          if (result?.length !== 2) {
 
-             response = error("Some user not found", 404);
-
-             throw new Error(response.message);
+             return error("Some user not found", 205);
 
          }
 
@@ -42,13 +42,11 @@ import error from "../error.js";
              WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [groupId]);
+         let result = await conn.query(stmt, [group_id]);
 
          if (!result?.length) {
 
-             response = error("Group not found", 404);
-
-             throw new Error(response.message);
+             return error("Group not found", 205);
 
          }
 
@@ -68,21 +66,23 @@ import error from "../error.js";
          await conn.query(stmt, [
            dateNow,
            dateNow,
-           groupId,
-           inviterId,
-           invitedId,
+           group_id,
+           inviter_id,
+           invited_id,
            "sent"
          ]);
 
+         return response;
+
      } catch (err) {
 
-         console.log("Error: ", err);
+         console.log("Internal Server Error: ", err);
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

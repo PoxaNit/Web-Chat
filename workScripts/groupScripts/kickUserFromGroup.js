@@ -1,16 +1,10 @@
 import pool from "../database/database.js";
+import error from "../error.js";
 
- function error (message, code) {
 
-     return {message: message, code: code, success: false, data: null};
+ async function kickUserFromGroup (message) {
 
- }
-
- async function kickUserFromGroup (
-   adminUserId, // Who take out the user from group
-   userId, // User who was kicked from the group
-   groupId
- ) {
+     const { group_id, user_id, by_user_id } = message.payload;
 
      let data = null;
 
@@ -18,7 +12,7 @@ import pool from "../database/database.js";
        message: "User is now out the group!",
        success: true,
        data: data,
-       code: 200
+       code: 107
      }
 
      const conn = await pool.getConnection();
@@ -31,29 +25,25 @@ import pool from "../database/database.js";
              SELECT id FROM users WHERE id = ? OR id = ?;
          `;
 
-         let result = await conn.query(stmt, [adminUserId, userId]);
+         let result = await conn.query(stmt, [by_user_id, user_id]);
 
          if (result?.length !== 2) {
 
-             response = error("User not found", 400);
-
-             throw new Error(response.message);
+             return error("User not found", 205);
 
          }
 
-       // Verifyibg if group exists
+       // Verifying if group exists
 
          stmt = `
              SELECT id FROM groups WHERE id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId]);
+         result = await conn.query(stmt, [group_id]);
 
          if (!result?.length) {
 
-             response = error("Group not found", 400);
-
-             throw new Error(response.message);
+             return error("Group not found", 205);
 
          }
 
@@ -64,13 +54,11 @@ import pool from "../database/database.js";
              WHERE group_id = ? AND (user_id = ? OR user_id = ?);
          `;
 
-         result = await conn.query(stmt, [groupId, userId, adminUserId]);
+         result = await conn.query(stmt, [group_id, user_id, by_user_id]);
 
          if (result?.length !== 2) {
 
-             response = error("User is not in the group!", 400);
-
-             throw new Error(response.message);
+             return error("User is not in the group!", 209);
 
          }
 
@@ -83,13 +71,11 @@ import pool from "../database/database.js";
              AND role = 'admin';
          `;
 
-         result = await conn.query(stmt, [groupId, adminUserId]);
+         result = await conn.query(stmt, [group_id, by_user_id]);
 
          if (!result?.length) {
 
-             response = error("User is not admin!", 400);
-
-             throw new Error(response.message);
+             return error("User is not admin!", 209);
 
          }
 
@@ -100,17 +86,19 @@ import pool from "../database/database.js";
              WHERE group_id = ? AND user_id = ?;
          `;
 
-         await conn.query(stmt, [groupId, userId]);
+         await conn.query(stmt, [group_id, user_id]);
+
+         return response;
 
      } catch (err) {
 
-         console.log("Error: ", err);
+         console.log("Internal Server Error: ", err);
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

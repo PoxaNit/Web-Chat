@@ -1,15 +1,17 @@
 import pool from "../../database/database.js";
 import error from "../error.js";
 
- async function changeInviteToGroupStatus (inviteToGroupId, status) {
+ async function changeInviteToGroupStatus (message) {
+
+     const { invite_to_group_id, status } = message.payload;
 
      let data = null;
 
      let response = {
-       message: "OK",
+       message: "UPDATED!",
        success: true,
        data: data,
-       code: 200
+       code: 107
      }
 
      const dateNow = Date.now();
@@ -29,9 +31,7 @@ import error from "../error.js";
 
          if (!result?.length) {
 
-             response = error("Invite not found", 404);
-
-             throw new Error(response.message);
+             return error("Invite not found", 205);
 
          }
 
@@ -46,18 +46,20 @@ import error from "../error.js";
          await conn.query(stmt, [
            dateNow,
            status,
-           inviteToGroupId
+           invite_to_group_id
          ]);
+
+         return response;
 
      } catch (err) {
 
-         console.log("Error: ", err);
+         console.log("Internal Server Error: ", err);
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

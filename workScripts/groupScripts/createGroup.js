@@ -1,12 +1,9 @@
 import pool from "../database/database.js";
+import error from "../error.js";
 
- function error (message, code) {
+ async function createGroup (message) {
 
-     return {message: message, success: false, data: null, code: code};
-
- }
-
- async function createGroup (creatorUserId, groupName) {
+     const { creator_user_id, group_name } = message.payload;
 
      let data = null;
 
@@ -14,7 +11,7 @@ import pool from "../database/database.js";
        message: "Group created!",
        data: data,
        success: true,
-       code: 200
+       code: 106
      }
 
      const dateNow = Date.now();
@@ -33,9 +30,7 @@ import pool from "../database/database.js";
 
          if (!result?.length) {
 
-             response = error("User not found", 400);
-
-             throw new Error(response.message);
+             return error("User not found", 205);
 
          }
 
@@ -54,8 +49,8 @@ import pool from "../database/database.js";
          const group_id = await conn.query(stmt, [
            dateNow,
            dateNow,
-           groupName,
-           creatorUserId
+           group_name,
+           creator_user_id
          ]);
 
     // Creating record in group_participants
@@ -74,19 +69,21 @@ import pool from "../database/database.js";
 	   dateNow,
 	   dateNow,
 	   group_id[0].id,
-	   creatorUserId,
+	   creator_user_id,
 	   "admin"
 	 ]);
 
+         return response;
+
      } catch (err) {
 
-         console.log("Error: ", err)
+         console.log("Internal Server Error: ", err)
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

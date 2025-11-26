@@ -1,12 +1,10 @@
 import pool from "../database/database.js";
+import error from "../error.js";
 
- function error (message, code) {
 
-     return {message: message, code: code, success: false, data: null};
+ async function leaveGroup (message) {
 
- }
-
- async function leaveGroup (userId, groupId) {
+     const { user_id, group_id } = message.payload;
 
      let data = null;
 
@@ -14,7 +12,7 @@ import pool from "../database/database.js";
        message: "User now is out the group!",
        success: true,
        data: data,
-       code: 200
+       code: 107
      }
 
      const conn = await pool.getConnection();
@@ -28,13 +26,11 @@ import pool from "../database/database.js";
              WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [userId]);
+         let result = await conn.query(stmt, [user_id]);
 
          if (!result?.length) {
 
-             response = error("User not found", 400);
-
-             throw new Error(response.message);
+             return error("User not found", 205);
 
          }
 
@@ -45,13 +41,11 @@ import pool from "../database/database.js";
              WHERE id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId]);
+         result = await conn.query(stmt, [group_id]);
 
          if (!result?.length) {
 
-             response = error("Group not found", 400);
-
-             throw new Error(response.message);
+             return error("Group not found", 205);
 
          }
 
@@ -62,13 +56,11 @@ import pool from "../database/database.js";
              WHERE group_id = ? AND user_id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId, userId]);
+         result = await conn.query(stmt, [group_id, user_id]);
 
          if (!result?.length) {
 
-             response = error("User is not in the group!", 400);
-
-             throw new Error(response.message);
+             return error("User is not in the group!", 209);
 
          }
 
@@ -79,7 +71,7 @@ import pool from "../database/database.js";
              WHERE group_id = ?;
          `;
 
-         result = await conn.query(stmt, [groupId]);
+         result = await conn.query(stmt, [group_id]);
 
          if (result?.length > 1) {
 
@@ -91,7 +83,7 @@ import pool from "../database/database.js";
                  AND role = 'admin';
              `;
 
-             let result2 = await conn.query(stmt, [groupId, userId]);
+             let result2 = await conn.query(stmt, [group_id, user_id]);
 
              // Verifying if there's no more admin in the group
 
@@ -101,7 +93,7 @@ import pool from "../database/database.js";
                  AND role = 'admin';
              `;
 
-             let result3 = await conn.query(stmt, [groupId, userId]);
+             let result3 = await conn.query(stmt, [group_id, user_id]);
 
 
            // If there's more than one user in the group and there's no more admin, pass admin role to the next oldest user
@@ -130,7 +122,7 @@ import pool from "../database/database.js";
                      WHERE group_id = ? AND user_id = ?;
                  `;
 
-                 await conn.query(stmt, [groupId, oldestUser.user_id]);
+                 await conn.query(stmt, [group_id, oldestUser.user_id]);
 
              }
 
@@ -143,17 +135,19 @@ import pool from "../database/database.js";
              WHERE group_id = ? AND user_id = ?;
          `;
 
-         await conn.query(stmt, [groupId, userId]);
+         await conn.query(stmt, [group_id, user_id]);
+
+         return response;
 
      } catch (err) {
 
-         console.log("Error: ", err);
+         console.log("Internal Server Error: ", err);
+
+         return response;
 
      } finally {
 
          await conn.release();
-
-         return response;
 
      }
 

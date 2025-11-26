@@ -117,264 +117,202 @@ Model of table invites_to_group:
 
 
 
+
 # Events
 
 ## Message Format:
-{"event": <string>, payload: <object>}
+{
+  event: <string>
+  payload: <object>
+}
 
+## Server format of Payload:
+{
+  message: <string>
+  success: <boolean>
+  data: <object> | null
+  code: <int>
+}
+
+
+## Client format of Payload:
+Just the data to send
 
 
 ## Server -> Client
 
-### Only server events
+### Not in response to client events
 
 notification
-  payload:
+  payload data:
     {
-      message: <string>
+      content: <string>
     }
+
+error
+  payload data:
+    null
+
 
 ### In response to client events
 
 message_sent -> response to send_message
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        message_id: <int>
-        sender_id: <int>
-        conversation_id: <int>
-        content: <string>
-      }
-      code: <int>
+      message_id: <int>
+      sender_id: <int>
+      conversation_id: <int>
+      content: <string>
     }
 
 user_created -> response to create_user
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        user_id: <int>
-        name: <string>
-        email: <string>
-      }
-      code: <int>
+      user_id: <int>
+      name: <string>
+      email: <string>
     }
 
 group_created -> response to create_group
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        group_id: <int>
-        name: <string>
-        creator_user_id: <int>
-      }
-      code: <int>
+      group_id: <int>
+      name: <string>
+      creator_user_id: <int>
     }
 
 user_leaved_group -> response to user_leave_group
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        group_id: <int>
-        user_id: <int>
-      }
-      code: <int>
+      group_id: <int>
+      user_id: <int>
     }
 
 admin_gived_to_user -> response to give_admin_to_user
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        group_id: <int>
-        user_id: <int>
-        role: <string> // 'admin'
-      }
-      code: <int>
+      group_id: <int>
+      user_id: <int>
+      role: <string> // 'admin'
     }
 
 admin_took_from_user -> response to take_admin_from_user
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        group_id: <int>
-        user_id: <int>
-        role: <string> // 'user'
-      }
-      code: <int>
+      group_id: <int>
+      user_id: <int>
+      role: <string>
     }
 
 message_updated -> response to update_message
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        message_id: <int>
-        content: <string>
-      }
-      code: <int>
+      message_id: <int>
+      content: <string>
     }
 
 group_updated -> response to update_group
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        group_id: <int>
-        name: <string>
-      }
-      code: <int>
+      group_id: <int>
+      name: <string>
     }
 
 user_updated -> response to update_user
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        user_id: <int>
-        name: <string>
-        email: <string>
-      }
-      code: <int>
+      user_id: <int>
+      name: <string>
+      email: <string>
     }
 
 conversations_listed -> response to list_conversations
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        conversations: <array>
-      }
-      code: <int>
+      conversations: <array>
     }
 
 messages_listed -> response to list_messages
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        messages: <array>
-      }
-      code: <int>
+      messages: <array>
     }
 
 messages_deleted -> response to delete_messages
-  payload:
-    {
-      message: <string>
-      success: <boolean>
-      data: {
-        message_ids: <array>
-      }
-      code: <int>
-    }
+  payload data:
+    null
+
 
 user_invited_to_group -> response to invite_user_to_group
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        group_id: <int>
-        inviter_id: <int>
-        invited_id: <int>
-      }
-      code: <int>
+      group_id: <int>
+      inviter_id: <int>
+      invited_id: <int>
     }
 
-user_kicked_from_group -> response to kick_user_from_group
-  payload:
+invite_to_group_status_changed -> response to change_invite_to_group_status
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        group_id: <int>
-        kicked_id: <int>
-        by_user_id: <int>
-      }
-      code: <int>
+      invite_to_group_id: <int>
+      status: <string>
+    }
+
+
+user_kicked_from_group -> response to kick_user_from_group
+  payload data:
+    {
+      group_id: <int>
+      kicked_id: <int>
+      by_user_id: <int>
+    }
+
+user_putted_in_group -> response to put_user_in_group
+  payload data:
+    {
+      user_id: <int>
+      group_id: <int>
     }
 
 user_accepted_invite_to_group -> response to accept_invite_to_group
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        group_id: <int>
-        user_id: <int>
-      }
-      code: <int>
+      group_id: <int>
+      user_id: <int>
     }
 
 invite_to_group_status_updated -> response to update_invite_to_group_status
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        invite_id: <int>
-        status: <string>
-      }
-      code: <int>
+      invite_id: <int>
+      status: <string>
     }
 
 user_deleted -> response to delete_user
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        user_id: <int>
-      }
-      code: <int>
+      user_id: <int>
     }
 
 user_logged_in -> response to log_in_user
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        user_id: <int>
-        is_logged: <boolean>
-      }
-      code: <int>
+      user_id: <int>
+      is_logged: <boolean>
     }
 
 user_logged_out -> response to log_out_user
-  payload:
+  payload data:
     {
-      message: <string>
-      success: <boolean>
-      data: {
-        user_id: <int>
-        is_logged: <boolean>
-      }
-      code: <int>
+      user_id: <int>
+      is_logged: <boolean>
     }
 
 
 ## Client -> Server
 
-
 send_message
-  payload:
+  payload data:
     {
       conversation_id: <int>
       sender_id: <int>
@@ -382,7 +320,7 @@ send_message
     }
 
 create_user
-  payload:
+  payload data:
     {
       name: <string>
       email: <string>
@@ -390,7 +328,7 @@ create_user
     }
 
 update_user
-  payload:
+  payload data:
     {
       user_id: <int>
       name: <string>
@@ -398,109 +336,123 @@ update_user
     }
 
 delete_user
-  payload:
+  payload data:
     {
       user_id: <int>
     }
 
 log_in_user
-  payload:
+  payload data:
     {
       email: <string>
       password: <string>
     }
 
 log_out_user
-  payload:
+  payload data:
     {
       user_id: <int>
     }
 
 create_group
-  payload:
+  payload data:
     {
       name: <string>
       creator_user_id: <int>
     }
 
 update_group
-  payload:
+  payload data:
     {
       group_id: <int>
       name: <string>
     }
 
 user_leave_group
-  payload:
+  payload data:
     {
       group_id: <int>
       user_id: <int>
     }
 
 give_admin_to_user
-  payload:
+  payload data:
     {
       group_id: <int>
       user_id: <int>
     }
 
 take_admin_from_user
-  payload:
+  payload data:
     {
       group_id: <int>
       user_id: <int>
     }
 
 invite_user_to_group
-  payload:
+  payload data:
     {
       group_id: <int>
       inviter_id: <int>
       invited_id: <int>
     }
 
+change_invite_to_group_status
+  payload data:
+    {
+      invite_to_group_id: <int>
+      status: <string>
+    }
+
 kick_user_from_group
-  payload:
+  payload data:
     {
       group_id: <int>
       user_id: <int>
       by_user_id: <int>
     }
 
+put_user_in_group
+  payload data:
+    {
+      user_id: <int>
+      group_id: <int>
+    }
+
 accept_invite_to_group
-  payload:
+  payload data:
     {
       invite_id: <int>
       user_id: <int>
     }
 
 update_invite_to_group_status
-  payload:
+  payload data:
     {
       invite_id: <int>
       status: <string>  // sent | delivered | accepted | refused
     }
 
 list_messages
-  payload:
+  payload data:
     {
       conversation_id: <int>
     }
 
 list_conversations
-  payload:
+  payload data:
     {
       user_id: <int>
     }
 
 delete_messages
-  payload:
+  payload data:
     {
       message_ids: <array>
     }
 
 update_message
-  payload:
+  payload data:
     {
       message_id: <int>
       content: <string>
@@ -520,6 +472,8 @@ update_message
 | 103  | MESSAGE_SENT          | Message delivered |
 | 104  | MESSAGES_HISTORY      | History messages fetched successfully |
 | 105  | PING_RESPONSE         | Pong response from server health check |
+| 106  | CREATED               | When server create resource
+| 107  | UPDATED               | When server update resource
 
 ---
 
@@ -532,7 +486,7 @@ update_message
 | 202  | INVALID_PAYLOAD       | Payload missing fields or formatted incorrectly |
 | 203  | AUTH_REQUIRED         | Action requires authentication |
 | 204  | INVALID_TOKEN         | Token invalid or expired |
-| 205  | USER_NOT_FOUND        | Target user does not exist |
+| 205  | NOT_FOUND             | Target does not exist |
 | 206  | MESSAGE_TOO_LONG      | Message exceeds character limit |
 | 207  | EMPTY_MESSAGE         | Empty content was sent |
 | 208  | FLOODING_DETECTED     | User sending messages too frequently |

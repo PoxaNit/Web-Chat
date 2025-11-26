@@ -4,7 +4,7 @@ import   fs                from "node:fs"                    ;
 import   createUser        from "./workScripts/createUser.js";
 import   dotenv            from "dotenv";
 import   process           from "node:process";
-
+import   event_handler     from "./event_handler.js";
 
  dotenv.config({path: "./.env"});
 
@@ -64,7 +64,7 @@ import   process           from "node:process";
 
 
 
- const wsPort = ws_server_port;
+ const wsPort = process.env.ws_server_port;
 
  const wss = new WebSocketServer({ port: wsPort });
 
@@ -74,22 +74,14 @@ import   process           from "node:process";
 
      ws.on("error", console.error);
 
-     ws.on("message", data => {
+     ws.on("message", async message => {
 
 
-         const json = JSON.parse(data);
+         const parsed_message = JSON.parse(message);
 
-         const response = JSON.stringify({
-           message: `Your name is: ${json.userName}`
-         });
+         const response = await event_handler(parsed_message);
 
-         wss.clients.forEach(client => {
-
-             client.send(response);
-
-         });
-
-         console.log(json);
+         ws.send(JSON.stringify(response));
 
      })
 
