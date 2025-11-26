@@ -19,14 +19,12 @@ Model of table messages:
 
   Fields of table:
 
-    id                 -> INT AUTO_INCREMENT PRIMARY KEY
-    created_at         -> BIGINT
-    updated_at         -> BIGINT
-    user_id            -> INT
-    recipient_user_id  -> INT
-    recipient_group_id -> INT
-    content            -> TEXT
-
+    id              -> INT AUTO_INCREMENT PRIMARY KEY
+    created_at      -> BIGINT
+    updated_at      -> BIGINT
+    conversation_id -> INT
+    sender_id       -> INT
+    content         -> TEXT
 
 
 Model of table message_status:
@@ -40,6 +38,18 @@ Model of table message_status:
     user_id    -> INT
     status     -> ENUM('sent', 'delivered', 'read')
 
+
+Model of table conversations:
+
+  Fields of table:
+
+    id         -> BIGINT
+    created_at -> BIGINT
+    updated_at -> BIGINT
+    user1_id   -> INT | NULL
+    user2_id   -> INT | NULL
+    group_id   -> INT | NULL
+    type       -> ENUM("private", "group")
 
 
 Model of table groups:
