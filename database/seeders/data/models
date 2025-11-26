@@ -43,7 +43,7 @@ Model of table conversations:
 
   Fields of table:
 
-    id         -> BIGINT
+    id         -> INT AUTO_INCREMENT PRIMARY KEY
     created_at -> BIGINT
     updated_at -> BIGINT
     user1_id   -> INT | NULL
@@ -86,3 +86,15 @@ Model of table logins:
     updated_at -> BIGINT
     user_id    -> INT
     is_logged  -> TINYINT(1)
+
+Model of table invites_to_group:
+
+  Fields of table:
+
+    id         -> INT AUTO_INCREMENT PRIMARY KEY
+    created_at -> BIGINT
+    updated_at -> BIGINT
+    group_id   -> INT
+    inviter_id -> INT
+    invited_id -> INT
+    status     -> ENUM("sent", "delivered", "accepted", "refused")
