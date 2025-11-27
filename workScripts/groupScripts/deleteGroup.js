@@ -1,10 +1,10 @@
-import pool from "../database/database.js";
+import pool from "../../database/database.js";
 import error from "../error.js";
 
 
  async function deleteGroup (message) {
 
-     const { admin_user_id, group_id } = message.payload;
+     const { by_admin_id, group_id } = message.payload;
 
      let data = null;
 
@@ -25,7 +25,7 @@ import error from "../error.js";
              SELECT id FROM users WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [admin_user_id]);
+         let result = await conn.query(stmt, [by_admin_id]);
 
          if (!result?.length) {
 
@@ -55,7 +55,7 @@ import error from "../error.js";
              AND role = 'admin';
          `;
 
-         result = await conn.query(stmt, [group_id, admin_user_id]);
+         result = await conn.query(stmt, [group_id, by_admin_id]);
 
          if (!result?.length) {
 

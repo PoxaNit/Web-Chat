@@ -165,6 +165,17 @@ message_sent -> response to send_message
       content: <string>
     }
 
+messages_status_changed -> response to change_message_status
+  payload data:
+    [
+      {
+        message_id: <int>
+        conversation_id: <int>
+        status: "delivered" | "read"
+      }
+      ...
+    ]
+
 user_created -> response to create_user
   payload data:
     {
@@ -179,6 +190,13 @@ group_created -> response to create_group
       group_id: <int>
       name: <string>
       creator_user_id: <int>
+    }
+
+group_deleted -> response to delete_group
+  payload data:
+    {
+      group_id: <int>
+      by_admin_id: <int>
     }
 
 user_leaved_group -> response to user_leave_group
@@ -226,16 +244,62 @@ user_updated -> response to update_user
       email: <string>
     }
 
+conversation_created -> response to create_conversation
+  payload data:
+    {
+      conversation_id: <int>
+      user1_id: <int> | null
+      user2_id: <int> | null
+      group_id: <int> | null
+      type: "private" | "group"
+    }
+
 conversations_listed -> response to list_conversations
   payload data:
     {
-      conversations: <array>
+      conversations: [
+        {
+          id: <int>
+          user1_id: <int> | null
+          user2_id: <int> | null
+          group_id: <int> | null
+          type: "private" | "group"
+          not_read_messages: [
+            {
+              message_id: <int>
+              created_at: <BIGINT>
+              updated_at: <BIGINT>
+              conversation_id: <int>
+              sender_id: <int>
+              content: <string>
+            }
+             ...
+          ]
+          last_message: {
+            message_id: <int>
+            created_at: <BIGINT>
+            updated_at: <BIGINT>
+            conversation_id: <int>
+            sender_id: <int>
+            content: <string>
+          } | null
+        }
+        ...
+      ]
     }
 
 messages_listed -> response to list_messages
   payload data:
     {
-      messages: <array>
+      messages: [
+        {
+          id: <int>
+          conversation_id: <int>
+          sender_id: <int>
+          content: <string>
+        }
+         ...
+      ]
     }
 
 messages_deleted -> response to delete_messages
@@ -264,7 +328,7 @@ user_kicked_from_group -> response to kick_user_from_group
     {
       group_id: <int>
       kicked_id: <int>
-      by_user_id: <int>
+      by_admin_id: <int>
     }
 
 user_putted_in_group -> response to put_user_in_group
@@ -319,6 +383,17 @@ send_message
       content: <string>
     }
 
+change_messages_status
+  payload data:
+    [
+     {
+       message_id: <int>
+       user_id: <int>
+       status: "delivered" | "read"
+     }
+     ...
+    ]
+
 create_user
   payload data:
     {
@@ -357,8 +432,14 @@ log_out_user
 create_group
   payload data:
     {
-      name: <string>
+      group_name: <string>
       creator_user_id: <int>
+    }
+
+delete_group
+  payload data:
+    {
+      group_id
     }
 
 update_group
@@ -409,7 +490,7 @@ kick_user_from_group
     {
       group_id: <int>
       user_id: <int>
-      by_user_id: <int>
+      by_admin_id: <int>
     }
 
 put_user_in_group
@@ -437,6 +518,15 @@ list_messages
   payload data:
     {
       conversation_id: <int>
+    }
+
+create_conversation
+  payload data:
+    {
+      user1_id: <int> | null
+      user2_id: <int> | null
+      group_id: <int> | null
+      type: "private" | "group"
     }
 
 list_conversations

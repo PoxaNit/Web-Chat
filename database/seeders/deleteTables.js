@@ -12,7 +12,9 @@ async function deleteTables () {
         "messages",
         "groups",
         "logins",
-        "users"
+        "users",
+        "conversations",
+        "invites_to_group"
     ];
 
     for (const table of tables) {

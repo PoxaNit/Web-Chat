@@ -3,6 +3,7 @@ import sendMessage from "./workScripts/messageScripts/sendMessage.js";
 import listMessages from "./workScripts/messageScripts/listMessages.js";
 import deleteMessages from "./workScripts/messageScripts/deleteMessage.js";
 import updateMessage from "./workScripts/messageScripts/changeMessageStatus.js";
+import changeMessagesStatus from "./workScripts/messageScripts/changeMessagesStatus.js";
 
 // CONVERSATION SCRIPTS
 import listConversations from "./workScripts/conversationScripts/listConversations.js";
@@ -45,6 +46,8 @@ async function event_handler(message) {
     case "update_message":
       return { event: "message_updated", payload: await updateMessage(message) };
 
+    case "change_messages_status":
+      return { event: "messages_status_changed", payload: await changeMessagesStatus(message) };
 
     // *** USER EVENTS ***
     case "create_user":

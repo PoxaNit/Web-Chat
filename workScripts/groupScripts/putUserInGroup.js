@@ -1,8 +1,8 @@
-import pool from "../database/database.js";
+import pool from "../../database/database.js";
 import error from "../error.js";
 
 
- async function putUserInGroup (user_id, group_id) {
+ async function putUserInGroup (message) {
 
      const { user_id, group_id } = message.payload;
 
@@ -57,7 +57,7 @@ import error from "../error.js";
              WHERE group_id = ? AND user_id = ?;
          `;
 
-         result = await conn.query(stmt, [user_id, group_id]);
+         result = await conn.query(stmt, [group_id, user_id]);
 
          if (result?.length) {
 

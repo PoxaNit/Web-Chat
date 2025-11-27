@@ -1,10 +1,10 @@
-import pool from "../database/database.js";
+import pool from "../../database/database.js";
 import error from "../error.js";
 
 
  async function kickUserFromGroup (message) {
 
-     const { group_id, user_id, by_user_id } = message.payload;
+     const { group_id, user_id, by_admin_id } = message.payload;
 
      let data = null;
 
@@ -25,7 +25,7 @@ import error from "../error.js";
              SELECT id FROM users WHERE id = ? OR id = ?;
          `;
 
-         let result = await conn.query(stmt, [by_user_id, user_id]);
+         let result = await conn.query(stmt, [by_admin_id, user_id]);
 
          if (result?.length !== 2) {
 
@@ -54,7 +54,7 @@ import error from "../error.js";
              WHERE group_id = ? AND (user_id = ? OR user_id = ?);
          `;
 
-         result = await conn.query(stmt, [group_id, user_id, by_user_id]);
+         result = await conn.query(stmt, [group_id, user_id, by_admin_id]);
 
          if (result?.length !== 2) {
 
@@ -71,7 +71,7 @@ import error from "../error.js";
              AND role = 'admin';
          `;
 
-         result = await conn.query(stmt, [group_id, by_user_id]);
+         result = await conn.query(stmt, [group_id, by_admin_id]);
 
          if (!result?.length) {
 

@@ -27,7 +27,7 @@ import error from "../error.js";
              WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [inviteToGroupId]);
+         let result = await conn.query(stmt, [invite_to_group_id]);
 
          if (!result?.length) {
 

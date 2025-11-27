@@ -12,11 +12,9 @@ import error from "../error.js";
      const { name, email, password } = message.payload;
 
      let data = {
-       user: {
-         name: name,
-         email: email,
-         id: null
-       }
+       name: name,
+       email: email,
+       user_id: null
      }
 
      let response = {
@@ -75,11 +73,11 @@ import error from "../error.js";
                email,
                password
              )
-             VALUES (?, ?, ?, ?, ?);
+             VALUES (?, ?, ?, ?, ?) RETURNING id;
 
          `;
 
-         await conn.query(stmt, [dateNow, dateNow, name, email, passwordHash]);
+         const userId = await conn.query(stmt, [dateNow, dateNow, name, email, passwordHash]);
 
 
          stmt = `
@@ -93,9 +91,9 @@ import error from "../error.js";
 
          `;
 
-         await conn.query(stmt, [dateNow, dateNow, result[0].id, 0]);
+         await conn.query(stmt, [dateNow, dateNow, userId[0].id, 0]);
 
-         response.data.user.id = result[0].id;
+         response.data.user_id = userId[0].id;
 
          return response;
 

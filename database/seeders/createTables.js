@@ -26,7 +26,6 @@ async function createTables() {
         updated_at BIGINT,
         user_id INT,
         is_logged TINYINT(1)
-        -- FOREIGN KEY (user_id) REFERENCES users(id)
       );
     `);
 
@@ -38,7 +37,6 @@ async function createTables() {
         updated_at BIGINT,
         name VARCHAR(255),
         creator_user_id INT
-        -- FOREIGN KEY (creator_user_id) REFERENCES users(id)
       );
     `);
 
@@ -51,8 +49,19 @@ async function createTables() {
         group_id INT,
         user_id INT,
         role ENUM('user', 'admin')
-        -- FOREIGN KEY (group_id) REFERENCES groups(id),
-        -- FOREIGN KEY (user_id) REFERENCES users(id)
+      );
+    `);
+
+    // CONVERSATIONS
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS conversations (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        created_at BIGINT,
+        updated_at BIGINT,
+        user1_id INT NULL,
+        user2_id INT NULL,
+        group_id INT NULL,
+        type ENUM('private', 'group')
       );
     `);
 
@@ -62,17 +71,13 @@ async function createTables() {
         id INT AUTO_INCREMENT PRIMARY KEY,
         created_at BIGINT,
         updated_at BIGINT,
-        user_id INT,
-        recipient_user_id INT,
-        recipient_group_id INT,
+        conversation_id INT,
+        sender_id INT,
         content TEXT
-        -- FOREIGN KEY (user_id) REFERENCES users(id),
-        -- FOREIGN KEY (recipient_user_id) REFERENCES users(id),
-        -- FOREIGN KEY (recipient_group_id) REFERENCES groups(id)
       );
     `);
 
-    // MESSAGE STATUS / RECEIPTS
+    // MESSAGE STATUS
     await conn.query(`
       CREATE TABLE IF NOT EXISTS message_status (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -81,8 +86,19 @@ async function createTables() {
         message_id INT,
         user_id INT,
         status ENUM('sent', 'delivered', 'read')
-        -- FOREIGN KEY (message_id) REFERENCES messages(id),
-        -- FOREIGN KEY (user_id) REFERENCES users(id)
+      );
+    `);
+
+    // INVITES TO GROUP
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS invites_to_group (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        created_at BIGINT,
+        updated_at BIGINT,
+        group_id INT,
+        inviter_id INT,
+        invited_id INT,
+        status ENUM('sent', 'delivered', 'accepted', 'refused')
       );
     `);
 

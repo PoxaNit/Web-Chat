@@ -36,6 +36,13 @@ async function sendMessage(message) {
 
     if (!conversation?.length) return error("Conversation not found", 205);
 
+    // Verifying if sender_id belongs to conversation
+    if (conversation[0].type === "private" && (conversation[0].user1_id !== sender_id && conversation[0].user2_id !== sender_id)) {
+
+        return error("Sender doesn't belong to conversation", 209);
+
+    }
+
     // Creating message
     stmt = `
       INSERT INTO messages (

@@ -1,4 +1,4 @@
-import pool from "../database/database.js";
+import pool from "../../database/database.js";
 import error from "../error.js";
 
  async function createGroup (message) {
@@ -26,7 +26,7 @@ import error from "../error.js";
              SELECT id FROM users WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [creatorUserId]);
+         let result = await conn.query(stmt, [creator_user_id]);
 
          if (!result?.length) {
 
