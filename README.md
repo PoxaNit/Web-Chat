@@ -136,7 +136,12 @@ Model of table invites_to_group:
 
 
 ## Client format of Payload:
-Just the data to send
+{
+  event: <string>
+  payload: {
+    the fields of the event model's payload data
+  }
+}
 
 
 ## Server -> Client

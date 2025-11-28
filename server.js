@@ -25,7 +25,7 @@ import   event_handler     from "./event_handler.js";
 
  app.get("/", (req, res) => {
 
-     fs.readFile("./static/index.html", (error, data) => {
+     fs.readFile("./public/static/index.html", (error, data) => {
 
          if (error) {
 
@@ -55,7 +55,7 @@ import   event_handler     from "./event_handler.js";
 
 
 
- app.use(express.static("./static"));
+ app.use(express.static("./public"));
 
 
 
