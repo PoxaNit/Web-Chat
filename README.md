@@ -126,6 +126,23 @@ This is how each object store in the database must be.
 
 Models:
 
+
+Model of object store users:
+
+  Fields of object store:
+
+    id         -> INT
+    created_at -> INT
+    updated_at -> INT
+    name       -> STRING
+    email      -> STRING
+
+
+
+Model of object store contacts
+
+  Fields of object store
+
 Model of object store conversations:
 
   Fields of object store:
@@ -154,7 +171,15 @@ Model of object store messages
     sender_id       -> INT
 
 
+Model of object store message_status
 
+  Fields of object store:
+
+    id         -> INT keyPath
+    created_at -> BIGINT
+    updated_at -> BIGINT
+    user_id    -> INT
+    message_id -> INT
 
 
 # Events
