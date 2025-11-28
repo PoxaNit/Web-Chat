@@ -11,7 +11,10 @@
  need to have the same name as the table followed by a ".json".
 
 
-# Data models
+
+# Data Models (databases)
+
+## Data models -> Server Database (MariaDB)
 
 
 This is how each table in the database must be.
@@ -117,6 +120,42 @@ Model of table invites_to_group:
 
 
 
+## Data models -> Client Database (IndexedDB)
+
+This is how each object store in the database must be.
+
+Models:
+
+Model of object store conversations:
+
+  Fields of object store:
+
+    id       -> INT keyPath
+    user1_id -> INT | NULL
+    user2_id -> INT | NULL
+    group_id -> INT | NULL
+    type     -> "private" | "group"
+
+
+Model of object store groups:
+
+  Fields of object store:
+
+    id         -> INT keyPath
+    creator_id -> INT
+    name       -> STRING
+
+Model of object store messages
+
+  Fields of object store:
+
+    id              -> INT keyPath
+    conversation_id -> INT
+    sender_id       -> INT
+
+
+
+
 
 # Events
 
@@ -144,7 +183,7 @@ Model of table invites_to_group:
 }
 
 
-## Server -> Client
+## Server -> Client Events
 
 ### Not in response to client events
 
@@ -378,7 +417,7 @@ user_logged_out -> response to log_out_user
     }
 
 
-## Client -> Server
+## Client -> Server Events
 
 send_message
   payload data:
