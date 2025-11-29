@@ -10,6 +10,10 @@
  By convention, each data file to insert into the database
  need to have the same name as the table followed by a ".json".
 
+ Although the id field in server <-> client comunication
+ payload's data is the name of table followed by underscore
+ and id (message_id, user_id, to make it more legible),
+ for standalization, in the databases it's stored just as id.
 
 
 # Data Models (databases)
@@ -213,40 +217,49 @@ Model of object store message_status
 ### Not in response to client events
 
 notification
-  payload data:
+  payload data field:
     {
       content: <string>
     }
 
 error
-  payload data:
+  payload data field:
     null
 
 
 ### In response to client events
 
 message_sent -> response to send_message
-  payload data:
+  payload data field:
     {
       message_id: <int>
+      created_at: <BIGINT>
+      updated_at: <BIGINT>
       sender_id: <int>
       conversation_id: <int>
       content: <string>
     }
 
 messages_status_changed -> response to change_message_status
-  payload data:
+  payload data field:
     [
       {
         message_id: <int>
+        created_at: <BIGINT>
+        updated_at: <BIGINT>
         conversation_id: <int>
         status: "delivered" | "read"
       }
       ...
     ]
 
+
+message_updated -> response to update_message
+  payload data field:
+    null
+
 user_created -> response to create_user
-  payload data:
+  payload data field:
     {
       user_id: <int>
       name: <string>
@@ -254,7 +267,7 @@ user_created -> response to create_user
     }
 
 group_created -> response to create_group
-  payload data:
+  payload data field:
     {
       group_id: <int>
       name: <string>
@@ -262,21 +275,21 @@ group_created -> response to create_group
     }
 
 group_deleted -> response to delete_group
-  payload data:
+  payload data field:
     {
       group_id: <int>
       by_admin_id: <int>
     }
 
 user_leaved_group -> response to user_leave_group
-  payload data:
+  payload data field:
     {
       group_id: <int>
       user_id: <int>
     }
 
 admin_gived_to_user -> response to give_admin_to_user
-  payload data:
+  payload data field:
     {
       group_id: <int>
       user_id: <int>
@@ -284,29 +297,23 @@ admin_gived_to_user -> response to give_admin_to_user
     }
 
 admin_took_from_user -> response to take_admin_from_user
-  payload data:
+  payload data field:
     {
       group_id: <int>
       user_id: <int>
       role: <string>
     }
 
-message_updated -> response to update_message
-  payload data:
-    {
-      message_id: <int>
-      content: <string>
-    }
 
 group_updated -> response to update_group
-  payload data:
+  payload data field:
     {
       group_id: <int>
       name: <string>
     }
 
 user_updated -> response to update_user
-  payload data:
+  payload data field:
     {
       user_id: <int>
       name: <string>
@@ -314,7 +321,7 @@ user_updated -> response to update_user
     }
 
 conversation_created -> response to create_conversation
-  payload data:
+  payload data field:
     {
       conversation_id: <int>
       user1_id: <int> | null
@@ -324,11 +331,11 @@ conversation_created -> response to create_conversation
     }
 
 conversations_listed -> response to list_conversations
-  payload data:
+  payload data field:
     {
       conversations: [
         {
-          id: <int>
+          conversation_id: <int>
           user1_id: <int> | null
           user2_id: <int> | null
           group_id: <int> | null
@@ -358,11 +365,13 @@ conversations_listed -> response to list_conversations
     }
 
 messages_listed -> response to list_messages
-  payload data:
+  payload data field:
     {
       messages: [
         {
-          id: <int>
+          message_id: <int>
+          created_at: <BIGINT>
+          updated_at: <BIGINT>
           conversation_id: <int>
           sender_id: <int>
           content: <string>
@@ -372,12 +381,12 @@ messages_listed -> response to list_messages
     }
 
 messages_deleted -> response to delete_messages
-  payload data:
+  payload data field:
     null
 
 
 user_invited_to_group -> response to invite_user_to_group
-  payload data:
+  payload data field:
     {
       group_id: <int>
       inviter_id: <int>
@@ -385,7 +394,7 @@ user_invited_to_group -> response to invite_user_to_group
     }
 
 invite_to_group_status_changed -> response to change_invite_to_group_status
-  payload data:
+  payload data field:
     {
       invite_to_group_id: <int>
       status: <string>
@@ -393,7 +402,7 @@ invite_to_group_status_changed -> response to change_invite_to_group_status
 
 
 user_kicked_from_group -> response to kick_user_from_group
-  payload data:
+  payload data field:
     {
       group_id: <int>
       kicked_id: <int>
@@ -401,41 +410,41 @@ user_kicked_from_group -> response to kick_user_from_group
     }
 
 user_putted_in_group -> response to put_user_in_group
-  payload data:
+  payload data field:
     {
       user_id: <int>
       group_id: <int>
     }
 
 user_accepted_invite_to_group -> response to accept_invite_to_group
-  payload data:
+  payload data field:
     {
       group_id: <int>
       user_id: <int>
     }
 
 invite_to_group_status_updated -> response to update_invite_to_group_status
-  payload data:
+  payload data field:
     {
       invite_id: <int>
       status: <string>
     }
 
 user_deleted -> response to delete_user
-  payload data:
+  payload data field:
     {
       user_id: <int>
     }
 
 user_logged_in -> response to log_in_user
-  payload data:
+  payload data field:
     {
       user_id: <int>
       is_logged: <boolean>
     }
 
 user_logged_out -> response to log_out_user
-  payload data:
+  payload data field:
     {
       user_id: <int>
       is_logged: <boolean>
@@ -445,7 +454,7 @@ user_logged_out -> response to log_out_user
 ## Client -> Server Events
 
 send_message
-  payload data:
+  payload:
     {
       conversation_id: <int>
       sender_id: <int>
@@ -453,7 +462,7 @@ send_message
     }
 
 change_messages_status
-  payload data:
+  payload:
     [
      {
        message_id: <int>
@@ -464,7 +473,7 @@ change_messages_status
     ]
 
 create_user
-  payload data:
+  payload:
     {
       name: <string>
       email: <string>
@@ -472,7 +481,7 @@ create_user
     }
 
 update_user
-  payload data:
+  payload:
     {
       user_id: <int>
       name: <string>
@@ -480,67 +489,67 @@ update_user
     }
 
 delete_user
-  payload data:
+  payload:
     {
       user_id: <int>
     }
 
 log_in_user
-  payload data:
+  payload:
     {
       email: <string>
       password: <string>
     }
 
 log_out_user
-  payload data:
+  payload:
     {
       user_id: <int>
     }
 
 create_group
-  payload data:
+  payload:
     {
       group_name: <string>
       creator_user_id: <int>
     }
 
 delete_group
-  payload data:
+  payload:
     {
       group_id
     }
 
 update_group
-  payload data:
+  payload:
     {
       group_id: <int>
       name: <string>
     }
 
 user_leave_group
-  payload data:
+  payload:
     {
       group_id: <int>
       user_id: <int>
     }
 
 give_admin_to_user
-  payload data:
+  payload:
     {
       group_id: <int>
       user_id: <int>
     }
 
 take_admin_from_user
-  payload data:
+  payload:
     {
       group_id: <int>
       user_id: <int>
     }
 
 invite_user_to_group
-  payload data:
+  payload:
     {
       group_id: <int>
       inviter_id: <int>
@@ -548,14 +557,14 @@ invite_user_to_group
     }
 
 change_invite_to_group_status
-  payload data:
+  payload:
     {
       invite_to_group_id: <int>
       status: <string>
     }
 
 kick_user_from_group
-  payload data:
+  payload:
     {
       group_id: <int>
       user_id: <int>
@@ -563,34 +572,35 @@ kick_user_from_group
     }
 
 put_user_in_group
-  payload data:
+  payload:
     {
       user_id: <int>
       group_id: <int>
     }
 
 accept_invite_to_group
-  payload data:
+  payload:
     {
       invite_id: <int>
       user_id: <int>
     }
 
 update_invite_to_group_status
-  payload data:
+  payload:
     {
       invite_id: <int>
       status: <string>  // sent | delivered | accepted | refused
     }
 
 list_messages
-  payload data:
-    {
-      conversation_id: <int>
-    }
+  payload:
+    [
+      conversation_id: <int>,
+      ...
+    ]
 
 create_conversation
-  payload data:
+  payload:
     {
       user1_id: <int> | null
       user2_id: <int> | null
@@ -599,19 +609,22 @@ create_conversation
     }
 
 list_conversations
-  payload data:
+  payload:
     {
       user_id: <int>
     }
 
 delete_messages
-  payload data:
+  payload:
     {
-      message_ids: <array>
+      message_ids: [
+        <int>,
+        ...
+      ]
     }
 
 update_message
-  payload data:
+  payload:
     {
       message_id: <int>
       content: <string>

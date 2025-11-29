@@ -1,53 +1,37 @@
-import openDb from "../../database/database.js";
-import storeMessages from "../messageScripts/storeMessages.js";
+import { addData } from "../../database/storageHandler/storageHandler.js";
 
- async function storeConversations (arrayOfConversationObjects) {
+ function storeConversations (message) {
 
-     const db = await openDb();
+     const { conversations } = message.payload.data;
 
-     const transaction = db.transaction("conversations", "readwrite");
+     for (const conversation of conversations) {
 
-     const conversations = transaction.objectStore("conversations");
+         const conversationObject = {
+           id: conversation.conversation_id,
+           user1_id: conversation.user1_id,
+           user2_id: conversation.user2_id,
+           group_id: conversation.group_id,
+           type: conversation.type
+         }
 
-     for (const conversation of arrayOfConversationObjects) {
+         addData("conversations", conversationObject);
 
-         const {
-           id,
-           user1_id,
-           user2_id,
-           group_id,
-           type,
-           last_message
-         } = conversation;
+         for (const message of conversation.not_read_messages) {
 
-         const objectToAdd = {
-           id,
-           user1_id,
-           user2_id,
-           group_id,
-           type,
-           last_message
-         };
+             const messageObject = {
+               id: message.message_id,
+               created_at: message.created_at,
+               updated_at: message.updated_at,
+               conversation_id: message.conversation_id,
+               sender_id: message.sender_id,
+               content: message.content
+             }
 
-         const request = conversations.add(objectToAdd);
-
-         request.onerror = e => console.log(e.target.error);
-
-         request.onsuccess = e => {
-
-             storeMessages(conversations.not_read_messages);
+             addData("messages", messageObject);
 
          }
 
      }
-
-     return new Promise((res, rej) => {
-
-         transaction.onerror = e => rej(e.target.error);
-
-         transaction.oncomplete = e => res();
-
-     });
 
  }
 

@@ -27,13 +27,21 @@
        1, // not found
        2, // not allowed operation
        3  // required function parameter not present
-     ]
+     ],
 
 
 // add data in a specified place in memory where still don't have data
     addData (objectStoreName, indexOfData, data) {
 
        this.checkParametersNotNull("addData", objectStoreName, indexOfData, data);
+
+       if (!this.objectStoreExists(objectStoreName)) {
+
+           const errorMessage = `Trying to add data in object cache: object store "${objectStoreName}" not found`;
+
+           return this.error(errorMessage, 1);
+
+       }
 
        if (this.checkIfDataExists(objectStoreName, indexOfData)) {
 
@@ -43,32 +51,12 @@
 
        }
 
-       let objectStoreExists;
-
-    // Verifying if parameter objectStoreName is valid
-       for (const objectStore of this.objectStoreNames) {
-
-           if (objectStoreName === objectStore) {
-
-               objectStoreExists = true;
-
-               break;
-
-           }
-
-       }
-
-       if (!objectStoreExists) {
-
-           return this.error(`Object store "${objectStoreName}" not exists in the cache`, 1);
-
-       }
 
        this.objectStores[objectStoreName][indexOfData.toString()] = data;
 
        return this.response();
 
-   }
+   },
 
 
 
@@ -83,7 +71,7 @@
 
        this.checkParametersNotNull("getData", objectStoreName, indexOfData);
 
-       if (!this.checkIfDataExists(objectStoreName, indexOfData)) {
+       if (!this.objectStoreExists(objectStoreName) || !this.checkIfDataExists(objectStoreName, indexOfData)) {
 
            const errorMessage = `Trying to get data in object cache: object store "${objectStoreName}": index "${indexOfData}": not found`;
 
@@ -95,7 +83,7 @@
 
        return this.response({data: dataToReturn});
 
-   }
+   },
 
 
 
@@ -110,6 +98,14 @@
 
        this.checkParametersNotNull("updateData", objectStoreName, indexOfData, data);
 
+       if (!this.objectStoreExists(objectStoreName)) {
+
+           const errorMessage = `Trying to update data in object cache: object store "${objectStoreName}" not found`;
+
+           return this.error(errorMessage, 1);
+
+       }
+
        if (!this.checkIfDataExists(objectStoreName, indexOfData)) {
 
            const errorMessage = `Trying to update data in object cache: object store "${objectStoreName}": index "${indexOfData}": not found`;
@@ -122,7 +118,7 @@
 
        return this.response();
 
-   }
+   },
 
 
 
@@ -134,6 +130,14 @@
     deleteData (objectStoreName, indexOfData) {
 
        this.checkParametersNotNull("deleteData", objectStoreName, indexOfData);
+
+       if (!this.objectStoreExists(objectStoreName)) {
+
+           const errorMessage = `Trying to delete data in object cache: object store "${objectStoreName}" not found`;
+
+           return this.error(errorMessage, 1);
+
+       }
 
        if (!this.checkIfDataExists(objectStoreName, indexOfData)) {
 
@@ -147,7 +151,7 @@
 
        return this.response();
 
-   }
+   },
 
 
 
@@ -163,11 +167,19 @@
 
        this.checkParametersNotNull("putData", objectStoreName, indexOfData, data);
 
+       if (!this.objectStoreExists(objectStoreName)) {
+
+           const errorMessage = `Trying to put data in object cache: object store "${objectStoreName}": not found`;
+
+           return this.error(errorMessage, 1);
+
+       }
+
        this.objectStores[objectStoreName][indexOfData.toString()] = data;
 
        return this.response();
 
-   }
+   },
 
 
 
@@ -183,10 +195,44 @@
 
        return this.response({data: Object.keys(this.objectStores)});
 
-   }
+    },
 
 
 
+
+
+
+// Verify if object store ecists in this object's objectStores property
+    objectStoreExists (objectStoreName) {
+
+        if (Object.keys(this.objectStores).includes(objectStoreName)) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    },
+
+
+
+
+
+
+// If this object's objectStores not includes some objectStore field,
+// make it to include
+    addObjectStoreIfNotExists (objectStoreName) {
+
+        if (!this.objectStoreExists(objectStoreName)) {
+
+            this.objectStores[objectStoreName] = {}; // Initialize it
+
+        }
+
+    },
 
 
 
@@ -210,7 +256,7 @@
 
        return true; // Success
 
-   }
+   },
 
 
 
@@ -229,13 +275,13 @@
 
        this.checkParametersNotNull("checkIfDataExists", objectStoreName, indexOfData);
 
-       if (this.objectStores?.[objectStoreName]?.[indexOfData]) {
+       if (typeof this.objectStores?.[objectStoreName]?.[indexOfData.toString()] === "object") {
 
            return true; // Success
 
        } else return false;
 
-   }
+   },
 
 
 
@@ -254,7 +300,7 @@
 
        return this.response({error: true, errorMessage: errorMessage, errorCode: errorCode, data: null});
 
-   }
+   },
 
 
 
@@ -278,7 +324,7 @@
          errorCode: errorCode
        }
 
-   }
+   },
 
 
 
