@@ -1,6 +1,8 @@
-import { addData } from "../../database/storageHandler/storageHandler.js";
+import { getData, addData } from "../../database/storageHandler/storageHandler.js";
 import ws from "../../../ws/ws.js";
+import storeMessagesStatus from "./storeMessagesStatus.js";
 
+// Store the message and message status when a message arrives
  async function storeMessage (message) {
 
      const {
@@ -10,7 +12,16 @@ import ws from "../../../ws/ws.js";
        sender_id,
        conversation_id,
        content
-     } = message.payload.data;
+     } = message.payload.data.message;
+
+     const {
+       message_status_id,
+       created_at,
+       updated_at,
+       message_id,
+       user_id,
+       status
+     } = message.payload.data.message_status
 
      const messageObject = {
        id: message_id,
@@ -21,10 +32,25 @@ import ws from "../../../ws/ws.js";
        content: content
      }
 
+     const messageStatusObject = {
+       id: message_status_id,
+       created_at: created_at,
+       updated_at: updated_at,
+       message_id: message_id,
+       user_id: user_id,
+       status: "delivered"
+     }
+
      addData("messages", messageObject);
 
+     storeMessagesStatus([messageStatusObject]);
+
      ws.send({
-       event: "message_"
+       event: "message_received",
+       payload: {
+         message_id: message_id,
+         user_id: user_id
+       }
      });
 
  }

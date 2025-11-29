@@ -28,6 +28,12 @@ import objectCache from "../cache/objectCache.js";
 
      },
 
+     getAllData (objectStoreName) {
+
+         return objectCache.getAllData(objectStoreName);
+
+     },
+
      async addData (objectStoreName, data) {
 
          const db = await openDb();

@@ -88,7 +88,23 @@
 
 
 
+   getAllData (objectStoreName) {
 
+       this.checkParametersNotNull("getAllData", objectStoreName);
+
+       if (Object.keys(this.objectStores).includes(objectStoreName)) {
+
+           return this.response({data: this.objectStores[objectStoreName]});
+
+       } else {
+
+           const errorMessage = `Object store "${objectStoreName}" not exists in object cache!`;
+
+           return this.error(errorMessage, 1);
+
+       }
+
+   },
 
 
 
@@ -183,7 +199,15 @@
 
 
 
+  // returns how many records there are in cache in the
+  // specified object store
+    howManyData (objectStoreName) {
 
+        this.checkParametersNotNull("howManyData", objectStoreName);
+
+        return Object.values(this.objectStores?.[objectStoreName])?.length || 0;
+
+    }
 
 
 

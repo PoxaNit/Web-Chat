@@ -143,10 +143,6 @@ Model of object store users:
 
 
 
-Model of object store contacts
-
-  Fields of object store
-
 Model of object store conversations:
 
   Fields of object store:
@@ -171,8 +167,11 @@ Model of object store messages
   Fields of object store:
 
     id              -> INT keyPath
+    created_at      -> BIGINT
+    updated_at      -> BIGINT
     conversation_id -> INT
     sender_id       -> INT
+    content         -> STRING
 
 
 Model of object store message_status
@@ -184,6 +183,7 @@ Model of object store message_status
     updated_at -> BIGINT
     user_id    -> INT
     message_id -> INT
+    status     -> STRING
 
 
 # Events
@@ -226,33 +226,53 @@ error
   payload data field:
     null
 
+new_message
+  payload data field:
+    {
+      message: {
+        message_id: <int>
+        created_at: <BIGINT>
+        updated_at: <BIGINT>
+        sender_id: <int>
+        conversation_id: <int>
+        content: <string>
+      }
+      message_status: {
+        message_status_id: <int>
+        created_at: <BIGINT>
+        updated_at: <BIGINT>
+        message_id: <int>
+        user_id: <int>
+        status: <string>
+      }
+    }
 
 ### In response to client events
 
 message_sent -> response to send_message
   payload data field:
     {
-      message_id: <int>
-      created_at: <BIGINT>
-      updated_at: <BIGINT>
-      sender_id: <int>
-      conversation_id: <int>
-      content: <string>
-    }
-
-messages_status_changed -> response to change_message_status
-  payload data field:
-    [
-      {
+      message: {
         message_id: <int>
         created_at: <BIGINT>
         updated_at: <BIGINT>
+        sender_id: <int>
         conversation_id: <int>
-        status: "delivered" | "read"
+        content: <string>
       }
-      ...
-    ]
+      message_status: {
+        message_status_id: <int>
+        created_at: <BIGINT>
+        updated_at: <BIGINT>
+        user_id: <int>
+        message_id: <int>
+        status: <string>
+      }
+    }
 
+messages_status_changed -> response to change_messages_status
+  payload data field:
+    null
 
 message_updated -> response to update_message
   payload data field:
@@ -459,6 +479,13 @@ send_message
       conversation_id: <int>
       sender_id: <int>
       content: <string>
+    }
+
+message_received
+  payload:
+    {
+      message_id: <int>
+      user_id: <int>
     }
 
 change_messages_status
