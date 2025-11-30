@@ -357,8 +357,30 @@
 
 
 
-// All the data stored in this object
-   objectStores: {}
+// All the data synchronized in cache with database
+   objectStores: {},
+
+// Stores states the application use
+   states: {
+     authContext: {
+     // the user who is using this app now
+       this_user_id: null,
+       this_user_name: null,
+       this_user_email: null,
+       this_user_is_logged: null
+     },
+
+     conversationContext: {
+     // when user is typing message in conversation
+       message_user_is_typing: "",
+
+
+     // the conversation is being rendered now
+       conversation_being_rendered_id: null
+
+     }
+
+   }
 
  }
 

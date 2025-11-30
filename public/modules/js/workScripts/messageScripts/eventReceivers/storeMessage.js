@@ -1,6 +1,8 @@
 import { getData, addData } from "../../database/storageHandler/storageHandler.js";
 import ws from "../../../ws/ws.js";
 import storeMessagesStatus from "./storeMessagesStatus.js";
+import renderNewMessage from "../../../utils/renderNewMessage.js";
+import { states } from "../../../../../database/cache/objectCache.js";
 
 // Store the message and message status when a message arrives
  async function storeMessage (message) {
@@ -44,6 +46,18 @@ import storeMessagesStatus from "./storeMessagesStatus.js";
      addData("messages", messageObject);
 
      storeMessagesStatus([messageStatusObject]);
+
+
+
+  // if user is in a conversation, it already show the new message
+     if (states.conversationContext.conversation_being_rendered_id === conversation_id) {
+
+         renderNewMessage(content);
+
+     }
+
+
+
 
      ws.send({
        event: "message_received",

@@ -1,5 +1,6 @@
 import conversationsList from "./lists/conversationsList.js";
 import headerToInicialScreen from "../headers/headerToInicialScreen.js";
+import { states } from "./conversationLayout.js";
 
 const root = document.getElementById("root");
 
@@ -7,6 +8,7 @@ const root = document.getElementById("root");
 
  function inicialScreen () {
 
+     root.replaceChildren();
 
      const header = document.createElement("header");
 
@@ -14,7 +16,9 @@ const root = document.getElementById("root");
 
      const footer = document.createElement("footer");
 
+     header.id = "inicial_screen_header";
      main.id = "inicial_screen_main";
+     footer.id = "inicial_screen_footer";
 
      header.appendChild(headerToInicialScreen());
 

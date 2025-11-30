@@ -6,7 +6,10 @@
      const objectStoresToCreate = [
        ["conversations", "id"],
        ["groups", "id"],
-       ["messages", "id"]
+       ["messages", "id"],
+       ["users", "id"],
+       ["message_status", "id"],
+       ["logins", "id"]
      ];
 
      for (const objectStore of objectStoresToCreate) {

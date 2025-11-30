@@ -12,6 +12,8 @@ import { getAllData } from "../../database/storageHandler/storageHandler.js";
 
      const ul = document.createElement("ul");
 
+     ul.id = "conversation_message_list";
+
      for (const msg of messages) {
 
 

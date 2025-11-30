@@ -1,4 +1,5 @@
 import { getAllData } from "../../database/";
+import conversationLayout from "../layouts/conversationLayout.js";
 
  function conversationsList (userName) {
 
@@ -35,6 +36,8 @@ import { getAllData } from "../../database/";
          li.appendChild(strong);
 
          li.appendChild(p);
+
+         li.onclick = conversationLayout(conv.id);
 
          ul.appendChild(li);
 

@@ -186,6 +186,17 @@ Model of object store message_status
     status     -> STRING
 
 
+Model of object store logins
+
+  Fields of object store:
+
+    id         -> INT keyPath
+    created_at -> BIGINT
+    updated_at -> BIGINT
+    user_id    -> INT
+    is_logged  -> TINYINT (1)
+
+
 # Events
 
 ## Message Format:
@@ -282,6 +293,8 @@ user_created -> response to create_user
   payload data field:
     {
       user_id: <int>
+      created_at: <BIGINT>
+      updated_at: <BIGINT>
       name: <string>
       email: <string>
     }
@@ -333,6 +346,14 @@ group_updated -> response to update_group
     }
 
 user_updated -> response to update_user
+  payload data field:
+    {
+      user_id: <int>
+      name: <string>
+      email: <string>
+    }
+
+logged_in_user -> response to login_user
   payload data field:
     {
       user_id: <int>
@@ -463,7 +484,7 @@ user_logged_in -> response to log_in_user
       is_logged: <boolean>
     }
 
-user_logged_out -> response to log_out_user
+user_logged_out -> response to logout_user
   payload data field:
     {
       user_id: <int>
@@ -507,6 +528,13 @@ create_user
       password: <string>
     }
 
+login_user
+  payload:
+    {
+      email: <string>
+      password: <string>
+    }
+
 update_user
   payload:
     {
@@ -528,7 +556,7 @@ log_in_user
       password: <string>
     }
 
-log_out_user
+logout_user
   payload:
     {
       user_id: <int>
