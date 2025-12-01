@@ -1,7 +1,6 @@
 import { WebSocketServer } from "ws"                         ;
 import   express           from "express"                    ;
 import   fs                from "node:fs"                    ;
-import   createUser        from "./workScripts/createUser.js";
 import   dotenv            from "dotenv";
 import   process           from "node:process";
 import   event_handler     from "./event_handler.js";
