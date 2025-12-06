@@ -117,10 +117,10 @@ import serverError from "../serverError.js";
                user2_id,
                group_id,
                type
-             ) VALUES (?, ?, ?, ?, ?, ?);
+             ) VALUES (?, ?, ?, ?, ?, ?) RETURNING id;
          `;
 
-         await conn.query(stmt, [
+         const convId = await conn.query(stmt, [
            dateNow,
            dateNow,
            user1_id,
@@ -128,6 +128,8 @@ import serverError from "../serverError.js";
            group_id,
            type
          ]);
+
+         response.data.conversation_id = convId[0].id;
 
          return response;
 

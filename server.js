@@ -17,42 +17,6 @@ import   event_handler     from "./event_handler.js";
 
 
 
- /* ------------------- ROUTES ------------------------------*/
-
-
-
-
- app.get("/", (req, res) => {
-
-     fs.readFile("./public/static/index.html", (error, data) => {
-
-         if (error) {
-
-             console.log(error);
-
-             return;
-
-         }
-
-         res.setHeader("Content-Type", "text/html");
-
-         res.send(data);
-
-     });
-
-
- });
-
-
- /* ------------------------ ROUTES - END ---------------------*/
-
-
-
-
-
-
-
-
 
  app.use(express.static("./public"));
 

@@ -5,10 +5,30 @@ async function sendMessage(message) {
 
   const { conversation_id, sender_id, content } = message.payload;
 
+  const dateNow = Date.now();
+
+  const data = {
+    message: {
+      message_id: null,
+      created_at: dateNow,
+      updated_at: dateNow,
+      sender_id: sender_id,
+      conversation_id: conversation_id,
+      content: content
+    },
+    message_status: {
+      message_status_id: null,
+      created_at: dateNow,
+      updated_at: dateNow,
+      user_id: null,
+      message_id: null
+    }
+  }
+
   let response = {
     message: "Message sent!",
     success: true,
-    data: null,
+    data: data,
     code: 100
   };
 
@@ -16,7 +36,6 @@ async function sendMessage(message) {
     return error("No content in message!", 201);
   }
 
-  const dateNow = Date.now();
   const conn = await pool.getConnection();
 
   try {
@@ -30,7 +49,7 @@ async function sendMessage(message) {
     // Verifying conversation exists
     stmt = `
       SELECT id, user1_id, user2_id, group_id, type
-      FROM conversations WHERE id = ?;
+      FROM conversations WHERE id = ?  RETURNING user1_id, user2_id;
     `;
     const conversation = await conn.query(stmt, [conversation_id]);
 
@@ -53,6 +72,8 @@ async function sendMessage(message) {
       dateNow, dateNow, conversation_id, sender_id, content
     ]);
 
+    let message_status_id;
+
     // Creating message status entries
     if (conversation[0].type === "group") {
 
@@ -68,9 +89,9 @@ async function sendMessage(message) {
         stmt = `
           INSERT INTO message_status (
             created_at, updated_at, message_id, user_id, status
-          ) VALUES (?, ?, ?, ?, ?)
+          ) VALUES (?, ?, ?, ?, ?) RETURNING id;
         `;
-        await conn.query(stmt, [
+        message_status_id = await conn.query(stmt, [
           dateNow, dateNow, message_id[0].id, user.user_id,
           user.user_id === sender_id ? "read" : "sent"
         ]);
@@ -86,9 +107,9 @@ async function sendMessage(message) {
       stmt = `
         INSERT INTO message_status (
           created_at, updated_at, message_id, user_id, status
-        ) VALUES (?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?) RETURNING id;
       `;
-      await conn.query(stmt, [
+      message_status_id = await conn.query(stmt, [
         dateNow, dateNow, message_id[0].id, receiver_id, "sent"
       ]);
 
@@ -103,6 +124,11 @@ async function sendMessage(message) {
       conversation_id: conversation_id,
       content: content
     };
+
+    response.data.message.message_id = message_id[0].id;
+    response.data.message_status.message_id = message_id[0].id;
+    response.data.message_status.message_status_id = message_status_id[0].id;
+
 
     return response;
 

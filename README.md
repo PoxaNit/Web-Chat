@@ -271,19 +271,30 @@ message_sent -> response to send_message
         conversation_id: <int>
         content: <string>
       }
-      message_status: {
-        message_status_id: <int>
-        created_at: <BIGINT>
-        updated_at: <BIGINT>
-        user_id: <int>
-        message_id: <int>
-        status: <string>
-      }
+      [
+          message_status: {
+          message_status_id: <int>
+          created_at: <BIGINT>
+          updated_at: <BIGINT>
+          user_id: <int>
+          message_id: <int>
+          status: <string>
+        }
+      ]
     }
 
 messages_status_changed -> response to change_messages_status
   payload data field:
-    null
+    [
+      {
+        message_status_id: <int>
+        created_at: <BIGINT>
+        updated_at: <BIGINT>
+        message_id: <int>
+        user_id: <int>
+        status: "delivered" | "read"
+      }
+    ]
 
 message_updated -> response to update_message
   payload data field:
@@ -659,7 +670,6 @@ create_conversation
     {
       user1_id: <int> | null
       user2_id: <int> | null
-      group_id: <int> | null
       type: "private" | "group"
     }
 

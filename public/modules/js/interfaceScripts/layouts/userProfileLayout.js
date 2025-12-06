@@ -1,4 +1,8 @@
 import { getData } from "../database/storageHandler/storageHandler.js";
+import verifyConversationExists from "../utils/verifyConversationExists.js";
+import { states } from "../../database/cache/objectCache.js";
+import conversationLayout from "./conversationLayout";
+import createConversation from "../../workScripts/conversationScripts/eventSenders/createConversation.js";
 
 const root = document.getElementById("root");
 
@@ -37,7 +41,7 @@ const root = document.getElementById("root");
      nameStrong.textContent = "Name:";
      nameP.textContent = user.name;
 
-     nameStrong.textContent = "Email:";
+     emailStrong.textContent = "Email:";
      emailP.textContent = user.email;
 
 
@@ -45,10 +49,37 @@ const root = document.getElementById("root");
      nameSection.appendChild(nameP);
 
      emailSection.appendChild(emailStrong);
-     emailSection.appendChild(nameP);
+     emailSection.appendChild(emailP);
 
      layout.appendChild(nameSection);
      layout.appendChild(emailSection);
+
+     if (!verifyConversationExists(userId, states.authContext.this_user_id)) {
+
+         const startConversationSection = document.createElement("section");
+
+         const startConversationButton = document.createElement("button");
+
+
+         startConversationSection.id = "user_profile_start_conversation_section";
+
+         startConversationButton.id = "user_profile_start_conversation_button";
+
+
+         startConversationButton.textContent = "start conversation";
+
+
+         startConversationSection.onclick = () => {
+
+             createConversation(userId, "private");
+
+         }
+
+         startConversationSection.appendChild(startConversationButton);
+
+         layout.appendChild(startConversationSection);
+
+     }
 
      root.appendChild(layout);
 

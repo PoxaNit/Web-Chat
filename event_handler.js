@@ -2,7 +2,6 @@
 import sendMessage from "./workScripts/messageScripts/sendMessage.js";
 import listMessages from "./workScripts/messageScripts/listMessages.js";
 import deleteMessages from "./workScripts/messageScripts/deleteMessage.js";
-import updateMessage from "./workScripts/messageScripts/changeMessageStatus.js";
 import changeMessagesStatus from "./workScripts/messageScripts/changeMessagesStatus.js";
 
 // CONVERSATION SCRIPTS
@@ -22,7 +21,6 @@ import updateInviteToGroupStatus from "./workScripts/groupScripts/changeInviteTo
 // USER SCRIPTS
 import createUser from "./workScripts/userScripts/createUser.js";
 import deleteUser from "./workScripts/userScripts/deleteUser.js";
-import updateUser from "./workScripts/userScripts/updateUser.js";
 
 // AUTH SCRIPTS
 import login from "./workScripts/userScripts/login.js";
@@ -52,9 +50,6 @@ async function event_handler(message) {
     // *** USER EVENTS ***
     case "create_user":
       return { event: "user_created", payload: await createUser(message) };
-
-    case "update_user":
-      return { event: "user_updated", payload: await updateUser(message) };
 
     case "delete_user":
       return { event: "user_deleted", payload: await deleteUser(message) };

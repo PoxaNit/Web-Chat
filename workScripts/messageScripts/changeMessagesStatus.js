@@ -6,9 +6,9 @@ async function changeMessagesStatus(message) {
 
  const messages = message.payload;
 
- let data = [
+ const dateNow = Date.now();
 
- ]
+ let data = [];
 
  let response = {
   message: "Messages status updated!",
@@ -27,7 +27,7 @@ async function changeMessagesStatus(message) {
 
    // Verifying if message exists
 
-   let stmt = `SELECT conversation_id FROM messages WHERE id = ?`;
+   let stmt = `SELECT id FROM messages WHERE id = ?`;
    const resultMsg = await conn.query(stmt, [message_id]);
 
    if (!resultMsg?.length) return error("Message not found", 202);
@@ -62,16 +62,20 @@ async function changeMessagesStatus(message) {
    // Changing the status
 
    stmt = `
-        UPDATE message_status SET status = ?
+        UPDATE message_status
+        SET status = ? updated_at = ?
         WHERE message_id = ? AND user_id = ?
+        RETURNING created_at;
       `;
 
-   await conn.query(stmt, [status, message_id, user_id]);
+   const created_at = await conn.query(stmt, [status, dateNow, message_id, user_id]);
 
 
    response.data.push({
     message_id: message_id,
-    conversation_id: resultMsg[0].conversation_id,
+    created_at: created_at[0].created_at,
+    updated_at: dateNow,
+    conversation_id: resultMsg[0].id,
     status: status
    });
 

@@ -18,7 +18,7 @@
 
 // This object is alive during all the application life and
 // serves as cache while the application runs.
-
+console.log("objectCache executing...")
  let objectCache = {
 
 
@@ -28,6 +28,35 @@
        2, // not allowed operation
        3  // required function parameter not present
      ],
+
+
+// All the data synchronized in cache with database
+   objectStores: {},
+
+// Stores states the application use
+   states: {
+     authContext: {
+     // the user who is using this app now
+       this_user_id: null,
+       this_user_name: null,
+       this_user_email: null,
+       this_user_is_logged: null
+     },
+
+     conversationContext: {
+     // when user is typing message in conversation
+       message_user_is_typing: "",
+
+
+     // the conversation is being rendered now
+       conversation_being_rendered_id: null
+
+     }
+
+   }
+
+
+
 
 
 // add data in a specified place in memory where still don't have data
@@ -357,30 +386,6 @@
 
 
 
-// All the data synchronized in cache with database
-   objectStores: {},
-
-// Stores states the application use
-   states: {
-     authContext: {
-     // the user who is using this app now
-       this_user_id: null,
-       this_user_name: null,
-       this_user_email: null,
-       this_user_is_logged: null
-     },
-
-     conversationContext: {
-     // when user is typing message in conversation
-       message_user_is_typing: "",
-
-
-     // the conversation is being rendered now
-       conversation_being_rendered_id: null
-
-     }
-
-   }
 
  }
 

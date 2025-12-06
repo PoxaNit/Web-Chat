@@ -37,12 +37,12 @@ import error from "../error.js";
 
        // Vrifying if group exists
 
-         let stmt = `
+         stmt = `
              SELECT id FROM group
              WHERE id = ?;
          `;
 
-         let result = await conn.query(stmt, [group_id]);
+         result = await conn.query(stmt, [group_id]);
 
          if (!result?.length) {
 
@@ -87,3 +87,5 @@ import error from "../error.js";
      }
 
  }
+
+ export default inviteToGroup;

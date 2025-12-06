@@ -1,4 +1,4 @@
-import pool from "../database/database.js";
+import pool from "../../database/database.js";
 import error from "../error.js";
 
  async function takeAdmin (message) {
