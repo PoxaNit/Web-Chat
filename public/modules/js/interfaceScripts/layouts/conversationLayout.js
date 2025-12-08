@@ -1,19 +1,21 @@
-import { states } from "../../database/cache/objectCache.js";
+import objectCache from "../../database/cache/objectCache.js";
 import messagesList from "../lists/messagesList.js";
 import inicialScreen from "./inicialScreen.js";
 import conversationOptionsLayot from "./conversationOptionsLayout.js";
 import storeTypingMessage from "../utils/storeTypingMessage.js";
+console.log("executing conversation layout...")
 
 const root = document.getElementById("root");
+console.log("executing conversation layout...")
 
  function conversationLayout (conversationId) {
-
+console.log("executing conversation layout...")
    // Clear the root element
      root.replaceChildren();
 
    // Storing the current conversation id in a state,
    // so other parts of the application can use it
-     states.conversationContext.conversation_being_rendered_id = conversationId;
+     objectCache.states.conversationContext.conversation_being_rendered_id = conversationId;
 
 
      const header = document.createElement("header");
@@ -59,7 +61,7 @@ const root = document.getElementById("root");
 
      button1.onclick = () => {
 
-         states.conversationContext.conversation_being_rendered_id = null;
+         objectCache.states.conversationContext.conversation_being_rendered_id = null;
 
          inicialScreen();
 

@@ -6,7 +6,7 @@ import { states } from "../../../../../database/cache/objectCache.js";
 
 // Store the message and message status when a message arrives
  async function storeMessage (message) {
-
+console.log(message)
      const {
        message_id,
        created_at,

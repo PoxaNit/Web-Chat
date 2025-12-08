@@ -1,15 +1,15 @@
-import { getAllData } from "../../database/";
+import objectCache from "../../database/cache/objectCache.js";
 import conversationLayout from "../layouts/conversationLayout.js";
 
  function conversationsList (userName) {
 
      const ul = document.createElement("ul");
 
-     const conversations = getAllData("conversations").data;
+     const conversations = objectCache.getAllData("conversations").data;
 
-     const users = getAllData("users").data;
+     const users = objectCache.getAllData("users").data;
 
-     const messages = getAllData("messages").data;
+     const messages = objectCache.getAllData("messages").data;
 
 
      for (const conv in conversations) {

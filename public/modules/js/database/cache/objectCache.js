@@ -18,7 +18,7 @@
 
 // This object is alive during all the application life and
 // serves as cache while the application runs.
-console.log("objectCache executing...")
+
  let objectCache = {
 
 
@@ -53,7 +53,7 @@ console.log("objectCache executing...")
 
      }
 
-   }
+   },
 
 
 
@@ -236,7 +236,7 @@ console.log("objectCache executing...")
 
         return Object.values(this.objectStores?.[objectStoreName])?.length || 0;
 
-    }
+    },
 
 
 

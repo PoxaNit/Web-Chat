@@ -1,8 +1,8 @@
-import { states } from "../../database/cache/objectCache.js";
+import objectCache from "../../database/cache/objectCache.js";
 
  function storeTypedName (text) {
 
-     states.authContext.this_user_name = text;
+     objectCache.states.authContext.this_user_name = text;
 
  }
 

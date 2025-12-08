@@ -1,4 +1,4 @@
-import { getAllData } from "../../database/storageHandler/storageHandler.js";
+import storageHandler from "../../database/storageHandler/storageHandler.js";
 
  function messagesList (conversationId) {
 

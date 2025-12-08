@@ -1,8 +1,8 @@
-import { states } from "../../database/cache/objectCache.js";
+import objectCache from "../../database/cache/objectCache.js";
 
  function storeTypingMessage (text) {
 
-     states.conversationContext.message_user_is_typing = text;
+     objectCache.states.conversationContext.message_user_is_typing = text;
 
  }
 

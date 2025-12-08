@@ -2,27 +2,28 @@ import storeTypedEmail from "../../utils/storeTypedEmail.js";
 import createUserForm from "./createUserForm.js";
 import loginUser from "../../../workScripts/userScripts/eventSenders/loginUser.js";
 
-const root = document.getElementById("root");
 
  function loginUserForm () {
+
+     const root = document.getElementById("root");
 
      root.replaceChildren();
 
      const form = document.createElement("form");
 
-     const emailSection = docuemnt.createElement("section");
+     const emailSection = document.createElement("section");
 
-     const passwordSection = docuemnt.createElement("section");
+     const passwordSection = document.createElement("section");
 
-     const submitSection = docuemnt.createElement("section");
+     const submitSection = document.createElement("section");
 
      const emailLabel = document.createElement("label");
 
      const passwordLabel = document.createElement("label");
 
-     const emailInput = docuemnt.createElement("input");
+     const emailInput = document.createElement("input");
 
-     const passwordInput = docuemnt.createElement("input");
+     const passwordInput = document.createElement("input");
 
      const submitButton = document.createElement("button");
 
@@ -38,15 +39,17 @@ const root = document.getElementById("root");
 
      emailLabel.id = "login_user_email_label";
 
-     emailLabel.id = "login_user_email_label";
+     passwordLabel.id = "login_user_password_label";
 
      emailInput.id = "login_user_email_input";
 
-     emailInput.id = "login_user_email_input";
+     passwordInput.id = "login_user_password_input";
 
      submitButton.id = "login_user_submit_button";
 
      showCreateUserFormButton.id = "show_create_user_form_button";
+
+
 
 
    // onEvents
@@ -57,8 +60,17 @@ const root = document.getElementById("root");
      showCreateUserFormButton.onclick = () => createUserForm();
 
 
+  // adding texts
+
+
+     emailLabel.textContent = "Email:";
+
+     passwordLabel.textContent = "Password:";
+
      showCreateUserFormButton.textContent =
      "Create new account";
+
+     submitButton.textContent = "Login";
 
    // Types
 
@@ -74,7 +86,7 @@ const root = document.getElementById("root");
      emailSection.appendChild(emailInput);
 
      passwordSection.appendChild(passwordLabel);
-     passwordSection.appendChild(passwordLabel);
+     passwordSection.appendChild(passwordInput);
 
      submitSection.appendChild(showCreateUserFormButton);
      submitSection.appendChild(submitButton);

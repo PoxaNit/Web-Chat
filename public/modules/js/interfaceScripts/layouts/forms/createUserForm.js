@@ -3,9 +3,10 @@ import storeTypedEmail from "../../utils/storeTypedEmail.js";
 import createUser from "../../../workScripts/userScripts/eventSenders/createUser.js";
 import loginUserForm from "./loginUserForm.js";
 
-const root = document.getElementById("root");
 
  function createUserForm () {
+
+     const root = document.getElementById("root");
 
      root.replaceChildren();
 

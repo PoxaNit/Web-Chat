@@ -4,7 +4,7 @@ import ws from "../../../ws/ws.js";
 
      const payload = {
        name: name,
-       email: emai,
+       email: email,
        password: password
      }
 

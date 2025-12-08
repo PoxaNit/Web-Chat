@@ -16,6 +16,18 @@
  for standalization, in the databases it's stored just as id.
 
 
+
+# Technical decisions
+
+## Authentication
+
+I decided to use stateful authentication (table logins)
+because I think it's better when users try to access an
+account already logged. It's easier to handle with this. Using
+JWT, for example, is bad for the user experience, because to a
+communication app, the user would have to log in many times.
+
+
 # Data Models (databases)
 
 ## Data models -> Server Database (MariaDB)

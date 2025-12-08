@@ -1,6 +1,7 @@
-import { getAllData } from "../../database/storageHandler/storageHandler.js";
+console.log("header executing...")
+import storageHandler from "../../database/storageHandler/storageHandler.js";
 import reRenderConversationsList from "../utils/reRenderConversationsList.js";
-
+console.log("header executing...")
  function headerToInicialScreen () {
 
      const div = document.createElement("div");

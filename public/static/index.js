@@ -1,7 +1,6 @@
 import start from "../modules/js/interfaceScripts/start.js";
 
-setTimeout(() => { console.log("start.js here")
-console.log("index.js here")
-
+setTimeout(() => {
 start();
 }, 8000)
+

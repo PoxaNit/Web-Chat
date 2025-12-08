@@ -1,7 +1,7 @@
-import { addData } from "../../database/storageHandler/storageHandler.js";
+import storageHandler from "../../database/storageHandler/storageHandler.js";
 
  function storeUser (message) {
-
+console.log(message);
      const {
        user_id,
        created_at,
@@ -18,7 +18,7 @@ import { addData } from "../../database/storageHandler/storageHandler.js";
        email: email
      }
 
-     addData("users", userObject);
+     storageHandler.addData("users", userObject);
 
  }
 
