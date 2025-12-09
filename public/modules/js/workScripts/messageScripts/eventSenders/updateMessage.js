@@ -8,7 +8,7 @@ import ws from "../../../ws/ws.js";
      const {
        message_id,
        content
-     } = message;
+     } = JSON.parse(message);
 
      const messageObject = {
        id: message_id,
@@ -17,9 +17,9 @@ import ws from "../../../ws/ws.js";
 
      updateData("messages", message);
 
-     ws.send({
+     ws.send(JSON.stringify({
        event: "update_message",
        payload: message
-     });
+     }));
 
  }

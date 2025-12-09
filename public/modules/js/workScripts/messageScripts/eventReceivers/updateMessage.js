@@ -7,7 +7,7 @@ import { updateData } from "../../database/storageHandler/storageHandler.js";
      const {
        message_id,
        content
-     } = message.payload.data;
+     } = JSON.parse(message).payload.data;
 
      const messageObject = {
        id: message_id,

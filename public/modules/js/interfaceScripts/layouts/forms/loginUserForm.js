@@ -56,7 +56,7 @@ import loginUser from "../../../workScripts/userScripts/eventSenders/loginUser.j
 
      form.onsubmit = e => e.preventDefault();
      emailInput.onchange = e => storeTypedEmail(e.target.value);
-     submitButton.click = () => loginUser(emailInput.value, passwordInput.value);
+     submitButton.onclick = () => loginUser(emailInput.value, passwordInput.value);
      showCreateUserFormButton.onclick = () => createUserForm();
 
 

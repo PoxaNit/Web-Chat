@@ -8,14 +8,14 @@ import { states } from "../../../database/cache/objectCache.js";
        conversation_being_rendered_id
      } = states;
 
-     ws.send({
+     ws.send(JSON.stringify({
        event: "send_message",
        payload: {
          sender_id: this_user_id,
          conversation_id: conversation_being_rendered_id,
          content: content
        }
-     });
+     }));
 
  }
 

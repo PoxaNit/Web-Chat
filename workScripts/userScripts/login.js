@@ -55,7 +55,7 @@ import error from "../error.js";
          `;
 
 
-         await conn.query(stmt, [result[0].id]);
+         await conn.query(stmt, [userId[0].id]);
 
          response.data.user_id = userId[0].id;
          response.data.is_logged = true;

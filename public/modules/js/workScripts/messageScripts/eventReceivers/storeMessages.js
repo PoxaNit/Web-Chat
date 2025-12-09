@@ -12,7 +12,7 @@ import { putData } from "../../../database/storageHandler/storageHandler.js";
 
      const {
        messages
-     } = message.payload.data;
+     } = JSON.parse(message).payload.data;
 
      for (const m of messages) {
 

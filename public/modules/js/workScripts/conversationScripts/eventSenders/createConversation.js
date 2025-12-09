@@ -9,10 +9,10 @@ import ws from "../../../ws/ws.js";
        type: type
      }
 
-     ws.send({
+     ws.send(JSON.stringify({
        event: "create_conversation",
        payload: payload
-     });
+     }));
 
  }
 

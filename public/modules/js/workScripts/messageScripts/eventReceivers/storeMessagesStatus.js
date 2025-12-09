@@ -1,6 +1,7 @@
 import { addData } from "../../database/storageHandler/storageHandler.js";
 import ws from "../../ws/ws.js";
 
+// This module doesn't handle event directly, but it's a util to other script
  function storeMessagesStatus (messageStatus = []) {
 
      for (const mt of messageStatus) {

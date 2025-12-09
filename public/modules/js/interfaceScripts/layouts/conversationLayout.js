@@ -3,13 +3,14 @@ import messagesList from "../lists/messagesList.js";
 import inicialScreen from "./inicialScreen.js";
 import conversationOptionsLayot from "./conversationOptionsLayout.js";
 import storeTypingMessage from "../utils/storeTypingMessage.js";
-console.log("executing conversation layout...")
 
-const root = document.getElementById("root");
 console.log("executing conversation layout...")
 
  function conversationLayout (conversationId) {
 console.log("executing conversation layout...")
+
+     const root = document.getElementById("root");
+
    // Clear the root element
      root.replaceChildren();
 

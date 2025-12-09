@@ -29,6 +29,7 @@ import logout from "./workScripts/userScripts/logout.js";
 
 async function event_handler(message) {
 
+
   switch (message.event) {
 
     // *** MESSAGE EVENTS ***
@@ -56,10 +57,10 @@ async function event_handler(message) {
 
 
     // *** AUTH EVENTS ***
-    case "log_in_user":
+    case "login_user":
       return { event: "user_logged_in", payload: await login(message) };
 
-    case "log_out_user":
+    case "logout_user":
       return { event: "user_logged_out", payload: await logout(message) };
 
 

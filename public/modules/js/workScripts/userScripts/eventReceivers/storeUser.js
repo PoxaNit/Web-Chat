@@ -1,14 +1,14 @@
 import storageHandler from "../../database/storageHandler/storageHandler.js";
 
  function storeUser (message) {
-console.log(message);
+
      const {
        user_id,
        created_at,
        updated_at,
        name,
        email
-     } = message.payload.data;
+     } = JSON.parse(message).payload.data;
 
      const userObject = {
        id: user_id,
@@ -19,7 +19,7 @@ console.log(message);
      }
 
      storageHandler.addData("users", userObject);
-
+console.log(`user in the local database and cache: ${storageHandler.getData(user_id)}`)
  }
 
  export default storeUser;

@@ -1,13 +1,10 @@
 import conversationsList from "../lists/conversationsList.js";
 import headerToInicialScreen from "../headers/headerToInicialScreen.js";
-import objectCache from "./conversationLayout.js";
-console.log("executing inicialScreen")
-
-//const root = document.getElementById("root");
-
 
  function inicialScreen () {
-console.log("executing inicialScreen")
+
+     const root = document.getElementById("root");
+
      root.replaceChildren();
 
      const header = document.createElement("header");
@@ -29,7 +26,6 @@ console.log("executing inicialScreen")
      root.appendChild(main);
 
      root.appendChild(footer);
-
 
  }
 

@@ -44,9 +44,9 @@ import error from "../error.js";
 
          result = await conn.query(stmt, [user_id]);
 
-         if (!result?.length) {
+         if (!result?.[0]?.is_logged) {
 
-             return error("User is already logged out!", 209);
+             return error("User is not logged in!", 209);
 
          }
 

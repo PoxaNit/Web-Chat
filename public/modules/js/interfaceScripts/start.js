@@ -3,7 +3,7 @@ import inicialScreen from "./layouts/inicialScreen.js";
 import objectCache from "../database/cache/objectCache.js";
 
  function start () {
-console.log("start here")
+
      const {
        this_user_is_logged
      } = objectCache.states.authContext;

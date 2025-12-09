@@ -14,10 +14,10 @@ import loginUserForm from "../../../interfaceScripts/layouts/forms/loginUserForm
        user_id: this_user_id
      }
 
-     ws.send({
+     ws.send(JSON.stringify({
        event: "logout_user",
        payload: payload
-     });
+     }));
 
      loginUserForm();
 

@@ -14,7 +14,7 @@ console.log(message)
        sender_id,
        conversation_id,
        content
-     } = message.payload.data.message;
+     } = JSON.parse(message).payload.data.message;
 
      const {
        message_status_id,

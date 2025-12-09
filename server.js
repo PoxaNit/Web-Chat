@@ -39,8 +39,8 @@ import   event_handler     from "./event_handler.js";
 
      ws.on("message", async message => {
 
-
          const parsed_message = JSON.parse(message);
+console.log(parsed_message)
 
          const response = await event_handler(parsed_message);
 

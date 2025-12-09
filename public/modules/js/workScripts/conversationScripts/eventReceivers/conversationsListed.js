@@ -2,7 +2,7 @@ import { addData } from "../../database/storageHandler/storageHandler.js";
 
  function storeConversations (message) {
 
-     const { conversations } = message.payload.data;
+     const { conversations } = JSON.parse(message).payload.data;
 
      for (const conversation of conversations) {
 

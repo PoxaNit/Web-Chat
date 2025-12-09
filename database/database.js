@@ -7,14 +7,13 @@ import mariadb from "mariadb";
  const __filename = fileURLToPath(import.meta.url);
  const __dirname = path.dirname(__filename);
 
- dotenv.config({path: });
+ dotenv.config({path: __dirname + "/../.env"});
 
  const pool = mariadb.createPool({
-   host: "localhost",
-   user: "root",
-   connectionLimit: 5,
-   database: "webchat",
-   port: 3000
+   host: process.env.db_host,
+   user: process.env.db_user,
+   database: process.env.db_name,
+   port: process.env.db_port
  });
 
  export default pool;

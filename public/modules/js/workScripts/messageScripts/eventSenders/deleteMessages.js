@@ -13,9 +13,9 @@ import ws from "../../../ws/";
 
      }
 
-     ws.send({
+     ws.send(JSON.stringify({
        event: "delete_messages",
        payload: message_ids
-     });
+     }));
 
  }

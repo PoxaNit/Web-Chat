@@ -1,4 +1,5 @@
-
+import client_event_handler from "../client_event_handler/client_event_handler.js";
+alert("executing ws")
  const ws = new WebSocket("http://localhost:8081");
 
  ws.addEventListener("open", event => {
@@ -22,6 +23,8 @@
  ws.addEventListener("message", event => {
 
      alert(`Message received: ${event.data}`);
+
+     client_event_handler(JSON.parse(event.data));
 
  });
 

@@ -7,10 +7,10 @@ import ws from "../../../ws/ws.js";
        password: password
      }
 
-     ws.send({
+     ws.send(JSON.stringify({
        event: "login_user",
        payload: payload
-     });
+     }));
 
  }
 

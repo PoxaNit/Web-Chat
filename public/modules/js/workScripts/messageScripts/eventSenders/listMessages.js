@@ -5,10 +5,10 @@ import ws from "../../../ws/ws.js";
 
      for (const id of conversation_ids) {
 
-         ws.send({
+         ws.send(JSON.stringify({
            event: "list_messages",
            payload: conversation_ids
-         });
+         }));
 
      }
 

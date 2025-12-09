@@ -1,9 +1,11 @@
 import ws from "../../../ws/ws.js";
-import { states } from "../../../database/cache/objectCache.js";
-import { putData } from "../../../database/storageHandler/storageHandler.js";
-import inicialScreen from "../../../interfaceScripts/inicialScreen.js";
+import objectCache from "../../../database/cache/objectCache.js";
+import storageHandler from "../../../database/storageHandler/storageHandler.js";
+import inicialScreen from "../../../interfaceScripts/layouts/inicialScreen.js";
 
  function userLoggedIn (message) {
+console.log(`executing userLoggedIn`)
+     if (!message.payload.success) return;
 
      const {
        user_id,
@@ -14,10 +16,10 @@ import inicialScreen from "../../../interfaceScripts/inicialScreen.js";
      } = message.payload.data;
 
 
-     states.authContext.this_user_is_logged = true;
-     states.authContext.this_user_name = name;
+     objectCache.states.authContext.this_user_is_logged = true;
+     objectCache.states.authContext.this_user_name = name;
 
-     states.authContext.this_user_email = email;
+     objectCache.states.authContext.this_user_email = email;
 
      const userObj = {
        id: user_id,
@@ -27,9 +29,10 @@ import inicialScreen from "../../../interfaceScripts/inicialScreen.js";
        email: email
      }
 
-     putData("users", userObj);
+     storageHandler.putData("users", userObj);
+console.log(`login: ${objectCache.states.authContext.this_user_is_logged}`)
 
-     inicialScreen();
+         inicialScreen();
 
  }
 

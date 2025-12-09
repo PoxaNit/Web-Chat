@@ -9,7 +9,7 @@ import conversationLayout from "../../../interfaceScripts/layouts/conversationLa
        user2_id,
        group_id,
        type
-     } = message.payload.data;
+     } = JSON.parse(message).payload.data;
 
      const conv = {
        id: conversation_id,
