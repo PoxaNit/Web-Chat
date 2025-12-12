@@ -1,6 +1,6 @@
 
  function createObjectStores (db) {
-
+console.log("createObjectStores executing...")
     // [objectStore, keyPath]
     // Explicit, so it can change more easily in the future
      const objectStoresToCreate = [
@@ -16,7 +16,7 @@
 
          if (!db.objectStoreNames.contains(objectStore[0])) {
 
-             db.createObjectStore(objectStore[0], objectStore[1]);
+             db.createObjectStore(objectStore[0], {keyPath: objectStore[1]});
 
          }
 

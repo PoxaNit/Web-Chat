@@ -19,7 +19,7 @@ import objectCache from "../cache/objectCache.js";
 // it'll be updated by searching for the id of the
 // provided data.
 
-
+console.log("storageHandler executing...")
  let storageHandler = {
 
      getData (objectStoreName, indexOfData /*Or id of data*/) {
@@ -122,7 +122,7 @@ import objectCache from "../cache/objectCache.js";
 
          const objectStore = transaction.objectStore(objectStoreName);
 
-         const putRequest = objectStore.put(objectStoreName, data);
+         const putRequest = objectStore.put(data);
 
          putRequest.onsuccess = e => {
 

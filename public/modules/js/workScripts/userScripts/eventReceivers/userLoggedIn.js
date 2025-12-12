@@ -18,7 +18,6 @@ console.log(`executing userLoggedIn`)
 
      objectCache.states.authContext.this_user_is_logged = true;
      objectCache.states.authContext.this_user_name = name;
-
      objectCache.states.authContext.this_user_email = email;
 
      const userObj = {
