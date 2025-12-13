@@ -1,4 +1,4 @@
-import { states } from "../../../database/cache/objectCache.js";
+import objectCache from "../../../database/cache/objectCache.js";
 import ws from "../../../ws/ws.js";
 import loginUserForm from "../../../interfaceScripts/layouts/forms/loginUserForm.js";
 
@@ -6,9 +6,7 @@ import loginUserForm from "../../../interfaceScripts/layouts/forms/loginUserForm
 
      const {
        this_user_id
-     } = states.authContext;
-
-     states.authContext.this_user_is_logged = false;
+     } = objectCache.states.authContext;
 
      const payload = {
        user_id: this_user_id
@@ -18,8 +16,6 @@ import loginUserForm from "../../../interfaceScripts/layouts/forms/loginUserForm
        event: "logout_user",
        payload: payload
      }));
-
-     loginUserForm();
 
  }
 

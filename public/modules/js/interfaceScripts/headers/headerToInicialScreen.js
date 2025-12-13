@@ -8,6 +8,8 @@ console.log("header executing...")
 
      const button = document.createElement("button");
 
+     const configButton = document.createElement("button");
+
      const p = document.createElement("p");
 
      const input = document.createElement("input");

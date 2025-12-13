@@ -1,7 +1,7 @@
 import objectCache from "../../database/cache/objectCache.js";
 import inicialScreen from "../layouts/inicialScreen.js";
 
- function headerToConfigurationLayout () {
+ function headerToConfigurationsLayout () {
 
      const root = document.getElementById("root");
 
@@ -60,4 +60,4 @@ import inicialScreen from "../layouts/inicialScreen.js";
 
  }
 
- export default headerToConfigurationLayout;
+ export default headerToConfigurationsLayout;
