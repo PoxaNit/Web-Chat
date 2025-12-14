@@ -1,18 +1,21 @@
-import { getAllData } from "../../database/storageHandler/storageHandler.js";
+import storageHandler from "../../database/storageHandler/storageHandler.js";
+import getUser from "../../workScripts/userScripts/eventSenders/getUser.js";
 
- function getUserByEmail (email) {
+ async function getUserByEmail (email) {
 
-      const users = getAllData("users").data;
+     const users = Object.values(getAllData("users").data);
 
-      for (const user of users) {
+     let correctUser = users.filter(u => u.email === email)[0] ?? null;
 
-          if (user.email === email) {
+     if (!correctUser) { // Now try to get from server
 
-              return user;
+         correctUser = await getUser(email);
 
-          }
+         if (!correctUser) return null;
 
-      }
+         return correctUser;
+
+     }
 
  }
 

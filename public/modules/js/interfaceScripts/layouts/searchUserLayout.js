@@ -2,15 +2,18 @@ import inicialScreen from "./inicialScreen.js";
 import userProfileLayout from "./userProfileLayout.js";
 import getUserByEmail from "../utils/getUserByEmail.js";
 
-const root = document.getElementById("root");
 
- function searchUserLayout () {
+ async function searchUserLayout () {
+
+     const root = document.getElementById("root");
 
      root.replaceChildren();
 
      const layout = document.createElement("div");
 
      const topSection = document.createElement("section");
+
+     const bottomSection = document.createElement("section");
 
      const profileDiv = document.createElement("div");
 
@@ -28,6 +31,7 @@ const root = document.getElementById("root");
 
      layout.id = "search_user_layout";
      topSection.id = "search_user_top_section";
+     bottomSection.id = "search_user_bottom_section";
      goBackButton.id = "search_user_go_back_button";
      searchButton.id = "search_user_search_button";
      messageP.id = "search_user_message_p";
@@ -37,14 +41,12 @@ const root = document.getElementById("root");
 
      goBackButton.textContent = "back";
      searchButton.textContent = "search";
-     messageP.textContent = "User not found";
 
-     messageP.style.display = "none";
 
      goBackButton.onclick = () => inicialScreen();
      searchButton.onclick = () => {
 
-         const result = getUserByEmail(searchInput.value);
+         const result = await getUserByEmail(searchInput.value);
 
          if (result) {
 
@@ -52,7 +54,7 @@ const root = document.getElementById("root");
 
          } else {
 
-             messageP.style.display = "inline";
+             messageP.textContent = "User not found";
 
          }
 

@@ -4,13 +4,16 @@ import { states } from "../../database/cache/objectCache.js";
 import conversationLayout from "./conversationLayout";
 import createConversation from "../../workScripts/conversationScripts/eventSenders/createConversation.js";
 
-const root = document.getElementById("root");
 
  function userProfileLayout (userId) {
+
+     const root = document.getElementById("root");
 
      root.replaceChildren();
 
      const layout = document.createElement("div");
+
+     const buttonSection = document.createElement("button");
 
      const nameSection = document.createElement("section");
 
@@ -28,6 +31,8 @@ const root = document.getElementById("root");
 
 
      layout.id = "user_profile_layout";
+
+     buttonSection.id = "user_profile_button_section";
 
      nameSection.id = "user_profile_name_section";
      nameStrong.id = "user_profile_name_strong";

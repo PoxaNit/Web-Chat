@@ -272,6 +272,16 @@ new_message
 
 ### In response to client events
 
+user_got -> response to get_user
+  payload data field:
+    {
+      user_id: <int>
+      created_at: <int>
+      updated_at: <int>
+      name: <string>
+      email: <string>
+    }
+
 message_sent -> response to send_message
   payload data field:
     {
@@ -349,7 +359,7 @@ admin_gived_to_user -> response to give_admin_to_user
     {
       group_id: <int>
       user_id: <int>
-      role: <string> // 'admin'
+      role: "user" | "admin"
     }
 
 admin_took_from_user -> response to take_admin_from_user
@@ -357,7 +367,7 @@ admin_took_from_user -> response to take_admin_from_user
     {
       group_id: <int>
       user_id: <int>
-      role: <string>
+      role: "user" | "admin"
     }
 
 
@@ -518,6 +528,12 @@ user_logged_out -> response to logout_user
 
 
 ## Client -> Server Events
+
+get_user
+  payload:
+    {
+      email: <string>
+    }
 
 send_message
   payload:
