@@ -14,7 +14,7 @@ import deleteUser from "../../workScripts/userScripts/eventSenders/deleteUser.js
 
      logoutButton.id = "configuration_layout_main_logout_button";
 
-     deleteAccountButton.id "configuration_layout_main_delete_account_button";
+     deleteAccountButton.id = "configuration_layout_main_delete_account_button";
 
 
      logoutButton.textContent = "Logout";

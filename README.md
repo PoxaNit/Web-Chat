@@ -254,16 +254,16 @@ new_message
     {
       message: {
         message_id: <int>
-        created_at: <BIGINT>
-        updated_at: <BIGINT>
+        created_at: <int>
+        updated_at: <int>
         sender_id: <int>
         conversation_id: <int>
         content: <string>
       }
       message_status: {
         message_status_id: <int>
-        created_at: <BIGINT>
-        updated_at: <BIGINT>
+        created_at: <int>
+        updated_at: <int>
         message_id: <int>
         user_id: <int>
         status: <string>
@@ -277,8 +277,8 @@ message_sent -> response to send_message
     {
       message: {
         message_id: <int>
-        created_at: <BIGINT>
-        updated_at: <BIGINT>
+        created_at: <int>
+        updated_at: <int>
         sender_id: <int>
         conversation_id: <int>
         content: <string>
@@ -286,8 +286,8 @@ message_sent -> response to send_message
       [
           message_status: {
           message_status_id: <int>
-          created_at: <BIGINT>
-          updated_at: <BIGINT>
+          created_at: <int>
+          updated_at: <int>
           user_id: <int>
           message_id: <int>
           status: <string>
@@ -300,8 +300,8 @@ messages_status_changed -> response to change_messages_status
     [
       {
         message_status_id: <int>
-        created_at: <BIGINT>
-        updated_at: <BIGINT>
+        created_at: <int>
+        updated_at: <int>
         message_id: <int>
         user_id: <int>
         status: "delivered" | "read"
@@ -316,8 +316,8 @@ user_created -> response to create_user
   payload data field:
     {
       user_id: <int>
-      created_at: <BIGINT>
-      updated_at: <BIGINT>
+      created_at: <int>
+      updated_at: <int>
       name: <string>
       email: <string>
     }
@@ -380,6 +380,8 @@ logged_in_user -> response to login_user
   payload data field:
     {
       user_id: <int>
+      created_at: <int>
+      updated_at: <int>
       name: <string>
       email: <string>
     }
@@ -407,8 +409,8 @@ conversations_listed -> response to list_conversations
           not_read_messages: [
             {
               message_id: <int>
-              created_at: <BIGINT>
-              updated_at: <BIGINT>
+              created_at: <int>
+              updated_at: <int>
               conversation_id: <int>
               sender_id: <int>
               content: <string>
@@ -417,8 +419,8 @@ conversations_listed -> response to list_conversations
           ]
           last_message: {
             message_id: <int>
-            created_at: <BIGINT>
-            updated_at: <BIGINT>
+            created_at: <int>
+            updated_at: <int>
             conversation_id: <int>
             sender_id: <int>
             content: <string>
@@ -434,8 +436,8 @@ messages_listed -> response to list_messages
       messages: [
         {
           message_id: <int>
-          created_at: <BIGINT>
-          updated_at: <BIGINT>
+          created_at: <int>
+          updated_at: <int>
           conversation_id: <int>
           sender_id: <int>
           content: <string>

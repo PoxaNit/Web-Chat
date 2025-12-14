@@ -1,7 +1,7 @@
-console.log("header executing...")
 import storageHandler from "../../database/storageHandler/storageHandler.js";
 import reRenderConversationsList from "../utils/reRenderConversationsList.js";
-console.log("header executing...")
+import configurationsLayout from "../layouts/configurationsLayout.js";
+
  function headerToInicialScreen () {
 
      const div = document.createElement("div");
@@ -15,21 +15,31 @@ console.log("header executing...")
      const input = document.createElement("input");
 
 
+     div.id = "inicial_screen_header_div";
 
+     button.id = "inicial_screen_header_div_add_new_contact_button";
 
-     button.id = "add_new_contact";
+     configButton.id = "inicial_screen_header_div_config_button";
 
-     button.textContent = "Add New Contact"
-
-     p.textContent = "Search a contact:";
+     p.id = "inicial_screen_header_div_p";
 
      input.id = "search_contact_input";
 
+
+     button.textContent = "Add New Contact"
+
+     configButton.textContent = "Configurations";
+
+     p.textContent = "Search a contact:";
+
+
+     configButton.onclick = () => configurationsLayout();
 
      input.onchange = e => reRenderConversationsList(e.target.value);
 
 
      div.appendChild(button);
+     div.appendChild(configButton);
      div.appendChild(p);
      div.appendChild(input);
 

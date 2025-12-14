@@ -4,6 +4,8 @@ import loginUserForm from "../../../interfaceScripts/layouts/forms/loginUserForm
 
  async function userDeleted (message) {
 
+     if (!message.payload.success) return;
+
      const { user_id } = message.payload.data;
 
      objectCache.states.authContext.this_user_id = null;
@@ -11,11 +13,11 @@ import loginUserForm from "../../../interfaceScripts/layouts/forms/loginUserForm
      objectCache.states.authContext.this_user_email = null;
      objectCache.states.authContext.this_user_is_logged = null;
 
-     const users = storageHandler.getAll();
-
+     const users = Object.values(storageHandler.getAllData("users").data);
+console.log(typeof users, users)
      const thisUser = users.filter(u => u.id === user_id);
 
-     await storageHandler.deleteData(thisUser[0]);
+     await storageHandler.deleteData("users", user_id);
 
      loginUserForm();
 

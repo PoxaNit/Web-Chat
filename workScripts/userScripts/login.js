@@ -7,7 +7,10 @@ import error from "../error.js";
 
      let data = {
        user_id: null,
-       is_logged: null
+       created_at: null,
+       updated_at: null,
+       name: null,
+       email: email
      };
 
      let response = {
@@ -24,12 +27,14 @@ import error from "../error.js";
        // Verify if user exists
 
          let stmt = `
-             SELECT id FROM users WHERE email = ?;
+             SELECT
+             id, created_at, updated_at, name
+             FROM users WHERE email = ?;
          `;
 
-         let userId = await conn.query(stmt, [email]);
+         let user = await conn.query(stmt, [email]);
 
-         if (!userId?.length) {
+         if (!user?.length) {
 
              return error("User not found", 205);
 
@@ -40,7 +45,7 @@ import error from "../error.js";
              SELECT is_logged FROM logins WHERE user_id = ?;
          `;
 
-         let result = await conn.query(stmt, [userId[0].id]);
+         let result = await conn.query(stmt, [user[0].id]);
 
          if (result?.[0]?.is_logged) {
 
@@ -55,11 +60,13 @@ import error from "../error.js";
          `;
 
 
-         await conn.query(stmt, [userId[0].id]);
+         await conn.query(stmt, [user[0].id]);
 
-         response.data.user_id = userId[0].id;
-         response.data.is_logged = true;
-
+         response.data.user_id = user[0].id;
+         response.data.created_at = parseInt(user[0].created_at);
+         response.data.updated_at = parseInt(user[0].updated_at);
+         response.data.name = user[0].name;
+console.log(response)
          return response;
 
      } catch (err) {

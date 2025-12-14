@@ -4,7 +4,7 @@ import storageHandler from "../../../database/storageHandler/storageHandler.js";
 import inicialScreen from "../../../interfaceScripts/layouts/inicialScreen.js";
 
  function userLoggedIn (message) {
-console.log(`executing userLoggedIn`)
+console.log(`executing userLoggedIn`, message)
      if (!message.payload.success) return;
 
      const {
@@ -16,6 +16,7 @@ console.log(`executing userLoggedIn`)
      } = message.payload.data;
 
 
+     objectCache.states.authContext.this_user_id = user_id;
      objectCache.states.authContext.this_user_is_logged = true;
      objectCache.states.authContext.this_user_name = name;
      objectCache.states.authContext.this_user_email = email;
@@ -27,11 +28,10 @@ console.log(`executing userLoggedIn`)
        name: name,
        email: email
      }
-
+console.log("user Object: ", userObj)
      storageHandler.putData("users", userObj);
-console.log(`login: ${objectCache.states.authContext.this_user_is_logged}`)
-
-         inicialScreen();
+console.log(storageHandler.getAllData("users"))
+     inicialScreen();
 
  }
 

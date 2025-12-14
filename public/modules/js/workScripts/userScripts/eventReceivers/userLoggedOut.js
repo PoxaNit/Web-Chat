@@ -4,6 +4,8 @@ import loginUserForm from "../../../interfaceScripts/layouts/forms/loginUserForm
 
  async function userLoggedOut (message) {
 
+     if (!message.payload.success) return;
+
      objectCache.states.authContext.this_user_is_logged = false;
 
      loginUserForm();

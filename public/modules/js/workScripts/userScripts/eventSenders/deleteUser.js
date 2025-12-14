@@ -15,3 +15,5 @@ import objectCache from "../../../database/cache/objectCache.js";
      }));
 
  }
+
+ export default deleteUser;

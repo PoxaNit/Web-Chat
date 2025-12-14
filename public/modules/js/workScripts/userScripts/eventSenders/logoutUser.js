@@ -7,11 +7,11 @@ import loginUserForm from "../../../interfaceScripts/layouts/forms/loginUserForm
      const {
        this_user_id
      } = objectCache.states.authContext;
-
+console.log(objectCache.states.authContext)
      const payload = {
        user_id: this_user_id
      }
-
+console.log(payload)
      ws.send(JSON.stringify({
        event: "logout_user",
        payload: payload

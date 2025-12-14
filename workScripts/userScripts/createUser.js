@@ -3,7 +3,7 @@ import error from "../error.js";
 
  const {
    createHash
- } = await import("node:crypto")                                   ;
+ } = await import("node:crypto");
 
 
 
@@ -11,10 +11,14 @@ import error from "../error.js";
 
      const { name, email, password } = message.payload;
 
+     const dateNow = Date.now();
+
      let data = {
+       user_id: null,
+       created_at: dateNow,
+       updated_at: dateNow,
        name: name,
-       email: email,
-       user_id: null
+       email: email
      }
 
      let response = {
@@ -27,8 +31,6 @@ import error from "../error.js";
      const conn = await pool.getConnection();
 
 
-
-     const dateNow = Date.now()                    ;
 
      const hash = createHash("sha256")             ;
 
@@ -94,7 +96,7 @@ import error from "../error.js";
          await conn.query(stmt, [dateNow, dateNow, userId[0].id, 0]);
 
          response.data.user_id = userId[0].id;
-
+console.log(response)
          return response;
 
      } catch (err) {

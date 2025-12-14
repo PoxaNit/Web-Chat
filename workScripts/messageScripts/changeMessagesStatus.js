@@ -73,7 +73,7 @@ async function changeMessagesStatus(message) {
 
    response.data.push({
     message_id: message_id,
-    created_at: created_at[0].created_at,
+    created_at: parseInt(created_at[0].created_at),
     updated_at: dateNow,
     conversation_id: resultMsg[0].id,
     status: status

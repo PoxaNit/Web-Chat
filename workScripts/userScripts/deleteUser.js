@@ -5,7 +5,9 @@ import error from "../error.js";
 
      const { user_id } = message.payload;
 
-     let data = null;
+     let data = {
+       user_id: user_id
+     };
 
      let response = {
        message: "User deleted!",
@@ -34,7 +36,7 @@ import error from "../error.js";
              DELETE FROM users WHERE id = ?;
          `;
 
-         await conn.query(stmt, [userId]);
+         await conn.query(stmt, [result[0].id]);
 
          return response;
 

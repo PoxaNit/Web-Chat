@@ -101,7 +101,7 @@ console.log("storageHandler executing...")
              const deleteRequest = objectStore.delete(indexOfData);
 
              deleteRequest.onsuccess = () => {
-
+console.log(objectStoreName, indexOfData)
                  res(objectCache.deleteData(objectStoreName, indexOfData));
 
              }

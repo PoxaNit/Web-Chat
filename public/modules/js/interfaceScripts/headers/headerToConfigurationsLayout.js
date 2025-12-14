@@ -33,7 +33,7 @@ import inicialScreen from "../layouts/inicialScreen.js";
      emailStrong.id = "configuration_layout_header_email_p";
 
 
-     goBackButto.onclick = () => inicialScreen();
+     goBackButton.onclick = () => inicialScreen();
 
 
      goBackButton.textContent = "Back";

@@ -31,7 +31,14 @@
 
 
 // All the data synchronized in cache with database
-   objectStores: {},
+   objectStores: {
+     users: {},
+     conversations: {},
+     groups: {},
+     messages: {},
+     message_status: {},
+     logins: {}
+   },
 
 // Stores states the application use
    states: {
@@ -83,7 +90,7 @@
 
        this.objectStores[objectStoreName][indexOfData.toString()] = data;
 
-       return this.response();
+       return this.response({data: null});
 
    },
 
@@ -122,7 +129,7 @@
        this.checkParametersNotNull("getAllData", objectStoreName);
 
        if (Object.keys(this.objectStores).includes(objectStoreName)) {
-
+console.log(JSON.stringify(this.objectStores[objectStoreName]))
            return this.response({data: this.objectStores[objectStoreName]});
 
        } else {
@@ -161,7 +168,7 @@
 
        this.objectStores[objectStoreName][indexOfData.toString()] = data;
 
-       return this.response();
+       return this.response({data: null});
 
    },
 
@@ -194,7 +201,7 @@
 
        delete this.objectStores[objectStoreName][indexOfData.toString()];
 
-       return this.response();
+       return this.response({data: null});
 
    },
 
@@ -222,7 +229,7 @@
 
        this.objectStores[objectStoreName][indexOfData.toString()] = data;
 
-       return this.response();
+       return this.response({data: null});
 
    },
 
