@@ -1,7 +1,7 @@
-import { getData } from "../database/storageHandler/storageHandler.js";
+import storageHandler from "../../database/storageHandler/storageHandler.js";
 import verifyConversationExists from "../utils/verifyConversationExists.js";
-import { states } from "../../database/cache/objectCache.js";
-import conversationLayout from "./conversationLayout";
+import objectCache from "../../database/cache/objectCache.js";
+import conversationLayout from "./conversationLayout.js";
 import createConversation from "../../workScripts/conversationScripts/eventSenders/createConversation.js";
 
 
@@ -27,7 +27,7 @@ import createConversation from "../../workScripts/conversationScripts/eventSende
 
      const emailP = document.createElement("p");
 
-     const user = getData(userId);
+     const user = storageHandler.getData(userId);
 
 
      layout.id = "user_profile_layout";
@@ -59,7 +59,7 @@ import createConversation from "../../workScripts/conversationScripts/eventSende
      layout.appendChild(nameSection);
      layout.appendChild(emailSection);
 
-     if (!verifyConversationExists(userId, states.authContext.this_user_id)) {
+     if (!verifyConversationExists(userId, objectCache.states.authContext.this_user_id)) {
 
          const startConversationSection = document.createElement("section");
 

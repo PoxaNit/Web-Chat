@@ -1,8 +1,8 @@
-import { getAllData } from "../../database/storageHandler/storageHandler.js";
+import storageHandler from "../../database/storageHandler/storageHandler.js";
 
  function verifyConversationExists (user1Id, user2Id) {
 
-     const conversations = getAllData("conversations").data;
+     const conversations = storageHandler.getAllData("conversations").data;
 
      for (const conv of conversations) {
 

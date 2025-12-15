@@ -8,7 +8,7 @@ import ws from "../../../ws/ws.js";
 
      ws.send(JSON.stringify({
        event: "get_user",
-       payload: paylaod
+       payload: payload
      }));
 
  }

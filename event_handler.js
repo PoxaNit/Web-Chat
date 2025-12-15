@@ -21,6 +21,7 @@ import updateInviteToGroupStatus from "./workScripts/groupScripts/changeInviteTo
 // USER SCRIPTS
 import createUser from "./workScripts/userScripts/createUser.js";
 import deleteUser from "./workScripts/userScripts/deleteUser.js";
+import getUser from "./workScripts/userScripts/getUser.js";
 
 // AUTH SCRIPTS
 import login from "./workScripts/userScripts/login.js";
@@ -55,6 +56,8 @@ async function event_handler(message) {
     case "delete_user":
       return { event: "user_deleted", payload: await deleteUser(message) };
 
+    case "get_user":
+      return { event: "user_got", payload: await getUser(message) }
 
     // *** AUTH EVENTS ***
     case "login_user":

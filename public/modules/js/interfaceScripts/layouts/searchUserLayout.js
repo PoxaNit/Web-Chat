@@ -44,10 +44,10 @@ import getUserByEmail from "../utils/getUserByEmail.js";
 
 
      goBackButton.onclick = () => inicialScreen();
-     searchButton.onclick = () => {
+     searchButton.onclick = async () => {
 
          const result = await getUserByEmail(searchInput.value);
-
+console.log(`user by id: ${result}`)
          if (result) {
 
              userProfileLayout(result.id);

@@ -1,10 +1,10 @@
-import { states } from "../../../database/cache/objectCache.js";
+import objectCache from "../../../database/cache/objectCache.js";
 import ws from "../../../ws/ws.js";
 
  function createConversation (user_id, type) {
 
      const payload = {
-       user1_id: states.authContext.this_user_id,
+       user1_id: objectCache.states.authContext.this_user_id,
        user2_id: user_id,
        type: type
      }

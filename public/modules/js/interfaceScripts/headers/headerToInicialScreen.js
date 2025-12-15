@@ -1,6 +1,7 @@
 import storageHandler from "../../database/storageHandler/storageHandler.js";
 import reRenderConversationsList from "../utils/reRenderConversationsList.js";
 import configurationsLayout from "../layouts/configurationsLayout.js";
+import searchUserLayout from "../layouts/searchUserLayout.js";
 
  function headerToInicialScreen () {
 
@@ -32,6 +33,8 @@ import configurationsLayout from "../layouts/configurationsLayout.js";
 
      p.textContent = "Search a contact:";
 
+
+     button.onclick = () => searchUserLayout();
 
      configButton.onclick = () => configurationsLayout();
 
