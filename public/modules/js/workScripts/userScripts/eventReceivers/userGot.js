@@ -2,31 +2,36 @@ import storageHandler from "../../../database/storageHandler/storageHandler.js";
 
  async function userGot (message) {
 
-     if (!message.payload.succes) {
+     return new Promise(async (res, rej) => {
 
-         return;
+         if (!message.payload.success) {
 
-     }
+             rej(null);
 
-     const {
-       user_id,
-       created_at,
-       updated_at,
-       name,
-       email
-     } = message.payload.data;
+         }
 
-     const userObject = {
-       id: user_id,
-       created_at: created_at,
-       updated_at: updated_at,
-       name: name,
-       email: email
-     }
+         const {
+           user_id,
+           created_at,
+           updated_at,
+           name,
+           email
+         } = message.payload.data.user;
 
-     storageHandler.addData("users", userObject);
+          const userObject = {
+           id: user_id,
+           created_at: created_at,
+           updated_at: updated_at,
+           name: name,
+           email: email
+         }
 
-     return userObject;
+         await storageHandler.addData("users", userObject);
+
+console.log("all data: ", storageHandler.getAllData("users"))
+         res(userObject);
+console.log("userObject: ", userObject)
+     });
 
  }
 

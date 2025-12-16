@@ -4,7 +4,7 @@ import userDeleted from "../workScripts/userScripts/eventReceivers/userDeleted.j
 import userGot from "../workScripts/userScripts/eventReceivers/userGot.js";
 
  async function client_event_handler (message) {
-
+console.log("message in event handler: ", message)
      switch (message.event) {
 
          case "user_logged_in":

@@ -1,7 +1,7 @@
 import ws from "../../../ws/ws.js";
 
  async function getUser (email) {
-
+console.log("getUser executing...")
      const payload = {
        email: email
      }
@@ -10,7 +10,7 @@ import ws from "../../../ws/ws.js";
        event: "get_user",
        payload: payload
      }));
-
+console.log("getUser executed")
  }
 
  export default getUser;

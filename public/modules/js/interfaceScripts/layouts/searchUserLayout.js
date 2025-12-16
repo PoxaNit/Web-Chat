@@ -47,7 +47,7 @@ import getUserByEmail from "../utils/getUserByEmail.js";
      searchButton.onclick = async () => {
 
          const result = await getUserByEmail(searchInput.value);
-console.log(`user by id: ${result}`)
+console.log(`user by email: ${result}`)
          if (result) {
 
              userProfileLayout(result.id);

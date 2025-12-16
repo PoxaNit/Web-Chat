@@ -68,7 +68,7 @@
 
 // add data in a specified place in memory where still don't have data
     addData (objectStoreName, indexOfData, data) {
-
+console.log("objectCache: addData executing: ", objectStoreName, indexOfData, data)
        this.checkParametersNotNull("addData", objectStoreName, indexOfData, data);
 
        if (!this.objectStoreExists(objectStoreName)) {

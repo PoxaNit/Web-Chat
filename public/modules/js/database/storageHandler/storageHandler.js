@@ -35,7 +35,7 @@ console.log("storageHandler executing...")
      },
 
      async addData (objectStoreName, data) {
-
+console.log("addData: data: ", data)
          const db = await openDb();
 
          return new Promise((res, rej) => {
