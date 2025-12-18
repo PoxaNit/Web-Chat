@@ -88,7 +88,12 @@ console.log("objectCache: addData executing: ", objectStoreName, indexOfData, da
        }
 
 
-       this.objectStores[objectStoreName][indexOfData.toString()] = data;
+       const obj = this.objectStores[objectStoreName][indexOfData.toString()] = data;
+console.log("property descriptors: ", Object.getOwnPropertyDescriptor(this.objectStores[objectStoreName], indexOfData.toString()))
+       Object.defineProperty(
+         this.objectStores[objectStoreName], indexOfData.toString(), {
+         enumerable: true
+       });
 
        return this.response({data: null});
 

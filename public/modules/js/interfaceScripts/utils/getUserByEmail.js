@@ -15,7 +15,7 @@ console.log("all users: ", storageHandler.getAllData("users"))
 
      users = storageHandler.getAllData("users").data;
 console.log("users: ", users, Object.values(users), Object.entries(users))
-
+console.log("property descriptor of users: ", Object.getOwnPropertyDescriptor(users, "107"))
      for (const user in users) {
 console.log("user: ", user)
 
