@@ -63,7 +63,9 @@
    },
 
 
-
+   internal_events: { // array of objects containing the method and a property "once" indicating it must be poped at the end of execution or not.
+     afterUserGot: []
+   },
 
 
 // add data in a specified place in memory where still don't have data
@@ -134,7 +136,7 @@ console.log("property descriptors: ", Object.getOwnPropertyDescriptor(this.objec
        this.checkParametersNotNull("getAllData", objectStoreName);
 
        if (Object.keys(this.objectStores).includes(objectStoreName)) {
-console.log(JSON.stringify(this.objectStores[objectStoreName]))
+
            return this.response({data: this.objectStores[objectStoreName]});
 
        } else {

@@ -29,8 +29,12 @@ console.log("storageHandler executing...")
      },
 
      getAllData (objectStoreName) {
-
-         return objectCache.getAllData(objectStoreName);
+console.log("getAllData executing...")
+         const a = objectCache.getAllData(objectStoreName);
+console.log("storageHandler: getAllData: data: " + JSON.stringify(a.data))
+console.log("storageHandler: getAllData: property descriptors: ", Object.getOwnPropertyDescriptors(a.data))
+console.log("storageHandler: getAllData: user 115: " + a.data[115])
+             return a;
 
      },
 

@@ -1,4 +1,5 @@
 import storageHandler from "../../../database/storageHandler/storageHandler.js";
+import afterUserGot from "../../../internalEvents/afterEvents/afterEventReceivers/afterUserGot/afterUserGot.js";
 
  async function userGot (message) {
 
@@ -18,7 +19,7 @@ import storageHandler from "../../../database/storageHandler/storageHandler.js";
            email
          } = message.payload.data.user;
 
-          const userObject = {
+         const userObject = {
            id: user_id,
            created_at: created_at,
            updated_at: updated_at,
@@ -28,9 +29,10 @@ import storageHandler from "../../../database/storageHandler/storageHandler.js";
 
          await storageHandler.addData("users", userObject);
 
-console.log("all data: ", storageHandler.getAllData("users"))
-         res(userObject);
-console.log("userObject: ", userObject)
+         afterUserGot(); // Trigger all the necessary events
+
+         res(null);
+
      });
 
  }
