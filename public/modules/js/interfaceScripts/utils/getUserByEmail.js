@@ -10,36 +10,38 @@ import addInternalEvent from "../../internalEvents/addEvents/addInternalEvents/a
 console.log("correctUser (first): ", correctUser)
 
      if (!correctUser) { // Load the user from server and get again
-
+console.log("executing inside if stmt...")
          async function fn () {
 
              users = storageHandler.getAllData("users").data;
-        const last_user = users[115]
+        const last_user = users[117]
         console.log("var last_user: " + last_user)
-        console.log("user 115: " + users[115])
+        console.log("user 117: " + users[117])
         console.log("users: ", users)
-        console.log("property descriptors of last user: ", Object.getOwnPropertyDescriptor(users, "115"))
+        console.log("property descriptors of last user: ", Object.getOwnPropertyDescriptor(users, "117"))
         console.log("property descriptors of users: ", Object.getOwnPropertyDescriptors(users))
 
             for (const user in users) {
         console.log("user: ", user)
 
                 if (user.email === email) {
+
                   correctUser = user;
 
                   break;
 
+                }
+
             }
 
          }
-
+console.log("after function fn declaration")
          console.log("event function added: ", addInternalEvent("afterUserGot", fn, true));
 
     console.log("going to execute getUser")
          await getUser(email);
     console.log("after execute getUser")
 
-     }
 
 
      }

@@ -1,7 +1,7 @@
 import objectCache from "../../../database/cache/objectCache.js";
-setTimeout(() => console.log("addInternalEvent.js executing..."), 5000)
 
  function addInternalEvent (event, func, once = false) {
+console.log("addInternalEvent executing...")
 
      const eventObj = {
        func: func,
@@ -12,7 +12,8 @@ setTimeout(() => console.log("addInternalEvent.js executing..."), 5000)
      if (Object.hasOwn(objectCache.internal_events, event)) {
 
          objectCache.internal_events[event].push(eventObj);
-
+console.log("internal events: ", objectCache.internal_events)
+console.log("event[0]: ", objectCache.internal_events[event][0])
          return true; // success
 
      }
