@@ -14,6 +14,8 @@ console.log("addInternalEvent executing...")
          objectCache.internal_events[event].push(eventObj);
 console.log("internal events: ", objectCache.internal_events)
 console.log("event[0]: ", objectCache.internal_events[event][0])
+console.log("event array: ", objectCache.internal_events[event])
+
          return true; // success
 
      }
