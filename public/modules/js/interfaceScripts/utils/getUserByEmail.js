@@ -34,6 +34,8 @@ console.log("executing inside if stmt...")
 
             }
 
+             return true;
+
          }
 console.log("after function fn declaration")
          console.log("event function added: ", addInternalEvent("afterUserGot", fn, true));
@@ -45,7 +47,7 @@ console.log("after function fn declaration")
 
 
      }
-
+console.log("correctUser at the end: ", correctUser)
      return correctUser;
 
  }
