@@ -60,6 +60,34 @@
 
      }
 
+
+
+
+
+
+
+
+
+
+
+
+    // stores variables in general that need to be visible globally
+     /*
+       To avoid variable override, it's better to make a "namespace"
+       for your variable. You can use the name of the script
+       that uses the variable, like so:
+
+        objectCache.states.variables_in_general.myScriptName = {};
+        objectCache.states.variables_in_general.myScriptName.myVariable = "whatever";
+     */
+     variables_in_general: {} // the variables are defined in execution time
+
+
+
+
+
+
+
    },
 
 

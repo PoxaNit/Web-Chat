@@ -1,6 +1,7 @@
 import storageHandler from "../../database/storageHandler/storageHandler.js";
 import getUser from "../../workScripts/userScripts/eventSenders/getUser.js";
 import addInternalEvent from "../../internalEvents/addEvents/addInternalEvents/addInternalEvent.js";
+import objectCache from "../../database/cache/objectCache.js";
 
  async function getUserByEmail (email) {
 
@@ -11,6 +12,11 @@ console.log("correctUser (first): ", correctUser)
 
      if (!correctUser) { // Load the user from server and get again
 console.log("executing inside if stmt...")
+
+         objectCache.states.variables_in_general.getUserByEmailNamespace = {};
+
+         objectCache.states.variables_in_general.getUserByEmailNamespace.correctUser = null;
+
          async function fn () {
 
              users = storageHandler.getAllData("users").data;
@@ -26,7 +32,7 @@ console.log("executing inside if stmt...")
 
                 if (user.email === email) {
 
-                  correctUser = user;
+                  objectCache.states.variables_in_general.getUserByEmailNamespace.correctUser = user;
 
                   break;
 
@@ -45,9 +51,12 @@ console.log("after function fn declaration")
     console.log("after execute getUser")
 
 
+         correctUser = objectCache.states.variables_in_general.getUserByEmailNamespace.correctUser;
+
 
      }
 console.log("correctUser at the end: ", correctUser)
+
      return correctUser;
 
  }
