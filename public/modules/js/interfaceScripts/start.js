@@ -18,6 +18,7 @@ import objectCache from "../database/cache/objectCache.js";
 
      }
      console.log(`user logged: ${this_user_is_logged}`)
+
  }
 
  export default start;

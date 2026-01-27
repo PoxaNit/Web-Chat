@@ -19,7 +19,12 @@ console.log("executing inside if stmt...")
 
          async function fn () {
 
-             users = storageHandler.getAllData("users").data;
+             return new Promise((res, rej) => {
+
+                 import("../../database/cache/objectCache.js")
+                 .then(module => {
+
+                     users = storageHandler.getAllData("users").data;
         const last_user = users[117]
         console.log("var last_user: " + last_user)
         console.log("user 117: " + users[117])
@@ -27,20 +32,24 @@ console.log("executing inside if stmt...")
         console.log("property descriptors of last user: ", Object.getOwnPropertyDescriptor(users, "117"))
         console.log("property descriptors of users: ", Object.getOwnPropertyDescriptors(users))
 
-            for (const user in users) {
+                    for (const user in users) {
         console.log("user: ", user)
 
-                if (user.email === email) {
+                        if (user.email === email) {
 
-                  objectCache.states.variables_in_general.getUserByEmailNamespace.correctUser = user;
+                            objectCache.states.variables_in_general.getUserByEmailNamespace.correctUser = user;
 
-                  break;
+                            break;
 
-                }
+                        }
 
-            }
+                    }
 
-             return true;
+
+                  })
+                  .catch(err => console.error(err));
+
+             });
 
          }
 console.log("after function fn declaration")

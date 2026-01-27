@@ -58,7 +58,7 @@
      // the conversation is being rendered now
        conversation_being_rendered_id: null
 
-     }
+     },
 
 
 

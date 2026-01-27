@@ -1,6 +1,6 @@
 import inicialScreen from "./inicialScreen.js";
 import userProfileLayout from "./userProfileLayout.js";
-import getUserByEmail from "../utils/getUserByEmail.js";
+//import getUserByEmail from "../utils/getUserByEmail.js";
 
 
  async function searchUserLayout () {
@@ -44,7 +44,7 @@ import getUserByEmail from "../utils/getUserByEmail.js";
 
 
      goBackButton.onclick = () => inicialScreen();
-     searchButton.onclick = async () => {
+  /*   searchButton.onclick = async () => {
 
          const result = await getUserByEmail(searchInput.value);
 console.log(`user by email: ${result}`)
@@ -58,7 +58,7 @@ console.log(`user by email: ${result}`)
 
          }
 
-     }
+     }*/
 
      topSection.appendChild(goBackButton);
 
