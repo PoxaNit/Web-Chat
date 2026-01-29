@@ -37,7 +37,7 @@ console.log("executing inside if stmt...")
 
                         if (user.email === email) {
 
-                            objectCache.states.variables_in_general.getUserByEmailNamespace.correctUser = user;
+                            module.states.variables_in_general.getUserByEmailNamespace.correctUser = user;
 
                             break;
 
