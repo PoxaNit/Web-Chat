@@ -1,5 +1,6 @@
 import storageHandler from "../../../database/storageHandler/storageHandler.js";
 import afterUserGot from "../../../internalEvents/afterEvents/afterEventReceivers/afterUserGot/afterUserGot.js";
+import objectCache from "../../../database/cache/objectCache.js";
 
  async function userGot (message) {
 

@@ -13,7 +13,7 @@
  Although the id field in server <-> client comunication
  payload's data is the name of table followed by underscore
  and id (message_id, user_id, to make it more legible),
- for standalization, in the databases it's stored just as id.
+ for standardization, in the databases it's stored just as id.
 
 
 

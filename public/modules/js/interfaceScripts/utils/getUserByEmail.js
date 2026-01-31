@@ -21,6 +21,8 @@ console.log("executing inside if stmt...")
 
              return new Promise((res, rej) => {
 
+                 const userProfileLayout = await import("../layouts/userProfileLayout.js");
+
                  import("../../database/cache/objectCache.js")
                  .then(module => {
 
@@ -37,7 +39,11 @@ console.log("executing inside if stmt...")
 
                         if (user.email === email) {
 
-                            module.states.variables_in_general.getUserByEmailNamespace.correctUser = user;
+              		    if (module.states.variables_in_general?.searchUser?.search) {
+
+			        userProfileLayout(user.id);
+
+			    }
 
                             break;
 
@@ -47,7 +53,7 @@ console.log("executing inside if stmt...")
 
 
                   })
-                  .catch(err => console.error(err));
+                  .catch(err => rej(err));
 
              });
 
@@ -60,13 +66,9 @@ console.log("after function fn declaration")
     console.log("after execute getUser")
 
 
-         correctUser = objectCache.states.variables_in_general.getUserByEmailNamespace.correctUser;
-
-
      }
-console.log("correctUser at the end: ", correctUser)
 
-     return correctUser;
+     return null;
 
  }
 

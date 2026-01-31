@@ -1,7 +1,6 @@
 import inicialScreen from "./inicialScreen.js";
-import userProfileLayout from "./userProfileLayout.js";
 import getUserByEmail from "../utils/getUserByEmail.js";
-
+import objectCache from "../../database/cache/objectCache.js";
 
  async function searchUserLayout () {
 
@@ -43,20 +42,20 @@ import getUserByEmail from "../utils/getUserByEmail.js";
      searchButton.textContent = "search";
 
 
-     goBackButton.onclick = () => inicialScreen();
+     goBackButton.onclick = () => {
+
+         objectCache.states.variables_in_general.searchUser = null;
+
+         inicialScreen();
+
+     }
+
      searchButton.onclick = async () => {
 
-         const result = await getUserByEmail(searchInput.value);
-console.log(`user by email: ${result}`)
-         if (result) {
+         objectCache.states.variables_in_general.searchUser = {};
+         objectCache.states.variables_in_general.searchUser.showUser = true;
 
-             userProfileLayout(result.id);
-
-         } else {
-
-             messageP.textContent = "User not found";
-
-         }
+         await getUserByEmail(searchInput.value);
 
      }
 
