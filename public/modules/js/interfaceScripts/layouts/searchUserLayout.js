@@ -1,6 +1,7 @@
 import inicialScreen from "./inicialScreen.js";
 import getUserByEmail from "../utils/getUserByEmail.js";
 import objectCache from "../../database/cache/objectCache.js";
+import userProfileLayout from "./userProfileLayout.js";
 
  async function searchUserLayout () {
 
@@ -55,7 +56,15 @@ import objectCache from "../../database/cache/objectCache.js";
          objectCache.states.variables_in_general.searchUser = {};
          objectCache.states.variables_in_general.searchUser.showUser = true;
 
-         await getUserByEmail(searchInput.value);
+         const user = await getUserByEmail(searchInput.value);
+
+         if (user) {
+console.log("user id got: ", user)
+             objectCache.states.variables_in_general.searchUser.showUser = false;
+
+             userProfileLayout(user);
+
+         }
 
      }
 

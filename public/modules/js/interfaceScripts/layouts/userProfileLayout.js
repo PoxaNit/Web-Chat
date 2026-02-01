@@ -6,7 +6,7 @@ import createConversation from "../../workScripts/conversationScripts/eventSende
 
 
  function userProfileLayout (userId) {
-
+console.log("userProfileLayout executing...")
      const root = document.getElementById("root");
 
      root.replaceChildren();

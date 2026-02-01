@@ -21,12 +21,13 @@ console.log("executing inside if stmt...")
 
              return new Promise((res, rej) => {
 
-                 const userProfileLayout = await import("../layouts/userProfileLayout.js");
-
                  import("../../database/cache/objectCache.js")
-                 .then(module => {
+                 .then(objectCache => {
 
-                     users = storageHandler.getAllData("users").data;
+                     import("../layouts/userProfileLayout.js")
+                     .then(userProfileLayout => {
+
+                         let users = storageHandler.getAllData("users").data;
         const last_user = users[117]
         console.log("var last_user: " + last_user)
         console.log("user 117: " + users[117])
@@ -34,22 +35,32 @@ console.log("executing inside if stmt...")
         console.log("property descriptors of last user: ", Object.getOwnPropertyDescriptor(users, "117"))
         console.log("property descriptors of users: ", Object.getOwnPropertyDescriptors(users))
 
-                    for (const user in users) {
-        console.log("user: ", user)
+                         const keys = Object.keys(users);
 
-                        if (user.email === email) {
+                         for (const key of keys) {
 
-              		    if (module.states.variables_in_general?.searchUser?.search) {
+			     const user = users[key];
 
-			        userProfileLayout(user.id);
+        console.log("user: ", user, "email: ", user.email)
 
-			    }
+                             if (user.email === email) {
+console.log("is it to show user search: ", objectCache.states.variables_in_general?.searchUser?.showUser)
+                  	 	 if (objectCache.states.variables_in_general?.searchUser?.showUser) {
 
-                            break;
+			             userProfileLayout(user.id);
 
-                        }
+			         }
 
-                    }
+                                 break;
+
+                             }
+
+                         }
+
+
+
+     		     })
+       		     .catch(err => rej(err));
 
 
                   })
@@ -68,7 +79,7 @@ console.log("after function fn declaration")
 
      }
 
-     return null;
+     return correctUser?.id;
 
  }
 
